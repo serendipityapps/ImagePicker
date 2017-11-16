@@ -12,6 +12,7 @@ class ImageStackView: UIView {
   }
 
   weak var delegate: ImageStackViewDelegate?
+	let configuration: Configuration
 
   lazy var activityView: UIActivityIndicatorView = {
     let view = UIActivityIndicatorView()
@@ -20,12 +21,12 @@ class ImageStackView: UIView {
     return view
     }()
 
-  var views: [UIImageView] = {
+  lazy var views: [UIImageView] = {
     var array = [UIImageView]()
     for _ in 0...3 {
       let view = UIImageView()
       view.layer.cornerRadius = 3
-      view.layer.borderColor = UIColor.white.cgColor
+      view.layer.borderColor = self.configuration.bottomControlTintColor.cgColor
       view.layer.borderWidth = 1
       view.contentMode = .scaleAspectFill
       view.clipsToBounds = true
@@ -37,7 +38,8 @@ class ImageStackView: UIView {
 
   // MARK: - Initializers
 
-  override init(frame: CGRect) {
+	required init(frame: CGRect, configuration: Configuration = Configuration()) {
+		self.configuration = configuration
     super.init(frame: frame)
 
     subscribe()
