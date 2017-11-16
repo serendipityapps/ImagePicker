@@ -41,6 +41,8 @@ public struct Configuration {
   public var cellSpacing: CGFloat = 2
   public var indicatorWidth: CGFloat = 41
   public var indicatorHeight: CGFloat = 8
+	public var galleryHeight: CGFloat = 160
+	public var galleryBarHeight: CGFloat = 24
 
   // MARK: Custom behaviour
 

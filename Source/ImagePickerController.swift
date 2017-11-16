@@ -141,7 +141,7 @@ open class ImagePickerController: UIViewController {
     super.viewDidAppear(animated)
 
     let galleryHeight: CGFloat = UIScreen.main.nativeBounds.height == 960
-      ? ImageGalleryView.Dimensions.galleryBarHeight : GestureConstants.minimumHeight
+      ? configuration.galleryBarHeight : GestureConstants.minimumHeight
 
     galleryView.collectionView.transform = CGAffineTransform.identity
     galleryView.collectionView.contentInset = UIEdgeInsets.zero
@@ -305,7 +305,7 @@ open class ImagePickerController: UIViewController {
     UIView.animate(withDuration: 0.3, animations: {
       self.updateGalleryViewFrames(GestureConstants.maximumHeight)
 
-      let scale = (GestureConstants.maximumHeight - ImageGalleryView.Dimensions.galleryBarHeight) / (GestureConstants.minimumHeight - ImageGalleryView.Dimensions.galleryBarHeight)
+			let scale = (GestureConstants.maximumHeight - self.configuration.galleryBarHeight) / (GestureConstants.minimumHeight - self.configuration.galleryBarHeight)
       self.galleryView.collectionView.transform = CGAffineTransform(scaleX: scale, y: scale)
 
       let value = self.view.frame.width * (scale - 1) / scale
@@ -504,10 +504,10 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
 
     if galleryHeight >= GestureConstants.maximumHeight { return }
 
-    if galleryHeight <= ImageGalleryView.Dimensions.galleryBarHeight {
-      updateGalleryViewFrames(ImageGalleryView.Dimensions.galleryBarHeight)
+    if galleryHeight <= configuration.galleryBarHeight {
+      updateGalleryViewFrames(configuration.galleryBarHeight)
     } else if galleryHeight >= GestureConstants.minimumHeight {
-      let scale = (galleryHeight - ImageGalleryView.Dimensions.galleryBarHeight) / (GestureConstants.minimumHeight - ImageGalleryView.Dimensions.galleryBarHeight)
+      let scale = (galleryHeight - configuration.galleryBarHeight) / (GestureConstants.minimumHeight - configuration.galleryBarHeight)
       galleryView.collectionView.transform = CGAffineTransform(scaleX: scale, y: scale)
       galleryView.frame.origin.y = initialFrame.origin.y + translation.y
       galleryView.frame.size.height = initialFrame.height - translation.y

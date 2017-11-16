@@ -20,11 +20,6 @@ protocol ImageGalleryPanGestureDelegate: class {
 
 open class ImageGalleryView: UIView {
 
-  struct Dimensions {
-    static let galleryHeight: CGFloat = 160
-    static let galleryBarHeight: CGFloat = 24
-  }
-
   var configuration = Configuration()
 
   lazy open var collectionView: UICollectionView = { [unowned self] in
@@ -130,28 +125,28 @@ open class ImageGalleryView: UIView {
   func updateFrames() {
     let totalWidth = UIScreen.main.bounds.width
     frame.size.width = totalWidth
-    let collectionFrame = frame.height == Dimensions.galleryBarHeight ? 100 + Dimensions.galleryBarHeight : frame.height
-    topSeparator.frame = CGRect(x: 0, y: 0, width: totalWidth, height: Dimensions.galleryBarHeight)
+    let collectionFrame = frame.height == configuration.galleryBarHeight ? 100 + configuration.galleryBarHeight : frame.height
+    topSeparator.frame = CGRect(x: 0, y: 0, width: totalWidth, height: configuration.galleryBarHeight)
     topSeparator.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin, .flexibleWidth]
     configuration.indicatorView.frame = CGRect(x: (totalWidth - configuration.indicatorWidth) / 2, y: (topSeparator.frame.height - configuration.indicatorHeight) / 2,
       width: configuration.indicatorWidth, height: configuration.indicatorHeight)
     collectionView.frame = CGRect(x: 0, y: topSeparator.frame.height, width: totalWidth, height: collectionFrame - topSeparator.frame.height)
     collectionSize = CGSize(width: collectionView.frame.height, height: collectionView.frame.height)
-    noImagesLabel.center = CGPoint(x: bounds.width / 2, y: (bounds.height + Dimensions.galleryBarHeight) / 2)
+    noImagesLabel.center = CGPoint(x: bounds.width / 2, y: (bounds.height + configuration.galleryBarHeight) / 2)
 
     collectionView.reloadData()
   }
 
   func updateNoImagesLabel() {
     let height = bounds.height
-    let threshold = Dimensions.galleryBarHeight * 2
+    let threshold = configuration.galleryBarHeight * 2
 
     UIView.animate(withDuration: 0.25, animations: {
       if threshold > height || self.collectionView.alpha != 0 {
         self.noImagesLabel.alpha = 0
       } else {
-        self.noImagesLabel.center = CGPoint(x: self.bounds.width / 2, y: (height + Dimensions.galleryBarHeight) / 2)
-        self.noImagesLabel.alpha = (height > threshold) ? 1 : (height - Dimensions.galleryBarHeight) / threshold
+				self.noImagesLabel.center = CGPoint(x: self.bounds.width / 2, y: (height + self.configuration.galleryBarHeight) / 2)
+				self.noImagesLabel.alpha = (height > threshold) ? 1 : (height - self.configuration.galleryBarHeight) / threshold
       }
     })
   }
