@@ -24,12 +24,12 @@ open class TopView: UIView {
     button.setImage(AssetManager.getImage("AUTO").withRenderingMode(.alwaysTemplate), for: UIControlState())
     button.setTitle("AUTO", for: UIControlState())
     button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
-    button.setTitleColor(self.configuration.controlTintColor, for: UIControlState())
-    button.setTitleColor(self.configuration.controlTintColor, for: .highlighted)
+    button.setTitleColor(self.configuration.cameraControlTintColor, for: UIControlState())
+    button.setTitleColor(self.configuration.cameraControlTintColor, for: .highlighted)
     button.titleLabel?.font = self.configuration.flashButton
     button.addTarget(self, action: #selector(flashButtonDidPress(_:)), for: .touchUpInside)
     button.contentHorizontalAlignment = .left
-		button.tintColor = self.configuration.controlTintColor
+		button.tintColor = self.configuration.cameraControlTintColor
 
     return button
     }()
@@ -39,7 +39,7 @@ open class TopView: UIView {
     button.setImage(AssetManager.getImage("cameraIcon").withRenderingMode(.alwaysTemplate), for: UIControlState())
     button.addTarget(self, action: #selector(rotateCameraButtonDidPress(_:)), for: .touchUpInside)
     button.imageView?.contentMode = .center
-		button.tintColor = self.configuration.controlTintColor
+		button.tintColor = self.configuration.cameraControlTintColor
 
     return button
     }()

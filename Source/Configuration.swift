@@ -12,7 +12,8 @@ public struct Configuration {
   public var noCameraTextColor = UIColor(red: 0.86, green: 0.86, blue: 0.86, alpha: 1)
   public var settingsColor = UIColor.white
   public var bottomContainerColor = UIColor(red: 0.09, green: 0.11, blue: 0.13, alpha: 1)
-	public var controlTintColor = UIColor.white
+	public var cameraControlTintColor = UIColor.white
+	public var bottomControlTintColor = UIColor.white
 	public var controlContrastTextTintColor = UIColor.black
 
   // MARK: Fonts

@@ -28,7 +28,7 @@ open class BottomContainerView: UIView {
   lazy var borderPickerButton: UIView = {
     let view = UIView()
     view.backgroundColor = UIColor.clear
-    view.layer.borderColor = self.configuration.controlTintColor.cgColor
+    view.layer.borderColor = self.configuration.bottomControlTintColor.cgColor
     view.layer.borderWidth = ButtonPicker.Dimensions.borderWidth
     view.layer.cornerRadius = ButtonPicker.Dimensions.buttonBorderSize / 2
 
@@ -40,7 +40,7 @@ open class BottomContainerView: UIView {
     button.setTitle(self.configuration.cancelButtonTitle, for: UIControlState())
     button.titleLabel?.font = self.configuration.doneButton
     button.addTarget(self, action: #selector(doneButtonDidPress(_:)), for: .touchUpInside)
-		button.tintColor = self.configuration.controlTintColor
+		button.tintColor = self.configuration.bottomControlTintColor
 
     return button
     }()
