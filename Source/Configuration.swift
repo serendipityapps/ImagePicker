@@ -7,7 +7,7 @@ public struct Configuration {
 
   public var backgroundColor = UIColor(red: 0.15, green: 0.19, blue: 0.24, alpha: 1)
   public var gallerySeparatorColor = UIColor.black.withAlphaComponent(0.6)
-	public var gallerybackgroundColor = UIColor(red: 0.09, green: 0.11, blue: 0.13, alpha: 1)
+	public var galleryBackgroundColor = UIColor(red: 0.09, green: 0.11, blue: 0.13, alpha: 1)
   public var mainColor = UIColor(red: 0.09, green: 0.11, blue: 0.13, alpha: 1)
   public var noImagesTextColor = UIColor(red: 0.86, green: 0.86, blue: 0.86, alpha: 1)
   public var noCameraTextColor = UIColor(red: 0.86, green: 0.86, blue: 0.86, alpha: 1)
