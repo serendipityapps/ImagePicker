@@ -56,7 +56,7 @@ open class ImagePickerController: UIViewController {
   lazy var panGestureRecognizer: UIPanGestureRecognizer = { [unowned self] in
     let gesture = UIPanGestureRecognizer()
     gesture.addTarget(self, action: #selector(panGestureRecognizerHandler(_:)))
-
+		gesture.isEnabled = self.isGalleryDrawerResizable
     return gesture
     }()
 
@@ -74,6 +74,8 @@ open class ImagePickerController: UIViewController {
   open var imageLimit = 0
   open var preferredImageSize: CGSize?
   open var startOnFrontCamera = false
+	open var isGalleryDrawerResizable = true
+
   var totalSize: CGSize { return UIScreen.main.bounds.size }
   var initialFrame: CGRect?
   var initialContentOffset: CGPoint?
@@ -466,6 +468,9 @@ extension ImagePickerController: TopViewDelegate {
 extension ImagePickerController: ImageGalleryPanGestureDelegate {
 
   func panGestureDidStart() {
+		guard isGalleryDrawerResizable else {
+			return
+		}
     guard let collectionSize = galleryView.collectionSize else { return }
 
     initialFrame = galleryView.frame
@@ -474,6 +479,9 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
   }
 
   @objc func panGestureRecognizerHandler(_ gesture: UIPanGestureRecognizer) {
+		guard isGalleryDrawerResizable else {
+			return
+		}
     let translation = gesture.translation(in: view)
     let velocity = gesture.velocity(in: view)
 
@@ -487,6 +495,9 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
   }
 
   func panGestureDidChange(_ translation: CGPoint) {
+		guard isGalleryDrawerResizable else {
+			return
+		}
     guard let initialFrame = initialFrame else { return }
 
     let galleryHeight = initialFrame.height - translation.y
@@ -512,6 +523,9 @@ extension ImagePickerController: ImageGalleryPanGestureDelegate {
   }
 
   func panGestureDidEnd(_ translation: CGPoint, velocity: CGPoint) {
+		guard isGalleryDrawerResizable else {
+			return
+		}
     guard let initialFrame = initialFrame else { return }
     let galleryHeight = initialFrame.height - translation.y
     if galleryView.frame.height < GestureConstants.minimumHeight && velocity.y < 0 {
