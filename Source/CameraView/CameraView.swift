@@ -48,7 +48,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   lazy var noCameraLabel: UILabel = { [unowned self] in
     let label = UILabel()
     label.font = self.configuration.noCameraFont
-    label.textColor = self.configuration.noCameraColor
+    label.textColor = self.configuration.noCameraTextColor
     label.text = self.configuration.noCameraTitle
     label.sizeToFit()
 

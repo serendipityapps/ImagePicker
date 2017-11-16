@@ -68,7 +68,7 @@ open class ImageGalleryView: UIView {
   open lazy var noImagesLabel: UILabel = { [unowned self] in
     let label = UILabel()
     label.font = self.configuration.noImagesFont
-    label.textColor = self.configuration.noImagesColor
+    label.textColor = self.configuration.noImagesTextColor
     label.text = self.configuration.noImagesTitle
     label.alpha = 0
     label.sizeToFit()

@@ -21,23 +21,25 @@ open class TopView: UIView {
 
   open lazy var flashButton: UIButton = { [unowned self] in
     let button = UIButton()
-    button.setImage(AssetManager.getImage("AUTO"), for: UIControlState())
+    button.setImage(AssetManager.getImage("AUTO").withRenderingMode(.alwaysTemplate), for: UIControlState())
     button.setTitle("AUTO", for: UIControlState())
     button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
-    button.setTitleColor(UIColor.white, for: UIControlState())
-    button.setTitleColor(UIColor.white, for: .highlighted)
+    button.setTitleColor(self.configuration.controlTintColor, for: UIControlState())
+    button.setTitleColor(self.configuration.controlTintColor, for: .highlighted)
     button.titleLabel?.font = self.configuration.flashButton
     button.addTarget(self, action: #selector(flashButtonDidPress(_:)), for: .touchUpInside)
     button.contentHorizontalAlignment = .left
+		button.tintColor = self.configuration.controlTintColor
 
     return button
     }()
 
   open lazy var rotateCamera: UIButton = { [unowned self] in
     let button = UIButton()
-    button.setImage(AssetManager.getImage("cameraIcon"), for: UIControlState())
+    button.setImage(AssetManager.getImage("cameraIcon").withRenderingMode(.alwaysTemplate), for: UIControlState())
     button.addTarget(self, action: #selector(rotateCameraButtonDidPress(_:)), for: .touchUpInside)
     button.imageView?.contentMode = .center
+		button.tintColor = self.configuration.controlTintColor
 
     return button
     }()
