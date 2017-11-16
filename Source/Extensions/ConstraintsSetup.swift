@@ -106,9 +106,16 @@ extension ImagePickerController {
     let topViewAttributes: [NSLayoutAttribute] = [.left, .top, .width]
 
     for attribute in attributes {
-      view.addConstraint(NSLayoutConstraint(item: bottomContainer, attribute: attribute,
-        relatedBy: .equal, toItem: view, attribute: attribute,
-        multiplier: 1, constant: 0))
+			if #available(iOS 9.0, *) {
+				view.addConstraint(NSLayoutConstraint(item: bottomContainer, attribute: attribute,
+																							relatedBy: .equal, toItem: attribute == .bottom ? self.bottomLayoutGuide.topAnchor : self.view, attribute: attribute,
+																							multiplier: 1, constant: 0))
+			} else {
+				// Fallback on earlier versions
+				view.addConstraint(NSLayoutConstraint(item: bottomContainer, attribute: attribute,
+																							relatedBy: .equal, toItem: self.view, attribute: attribute,
+																							multiplier: 1, constant: 0))
+			}
     }
 
     for attribute: NSLayoutAttribute in [.left, .top, .width] {
@@ -118,9 +125,16 @@ extension ImagePickerController {
     }
 
     for attribute in topViewAttributes {
-      view.addConstraint(NSLayoutConstraint(item: topView, attribute: attribute,
-        relatedBy: .equal, toItem: self.view, attribute: attribute,
-        multiplier: 1, constant: 0))
+			if #available(iOS 9.0, *) {
+				view.addConstraint(NSLayoutConstraint(item: topView, attribute: attribute,
+																							relatedBy: .equal, toItem: attribute == .top ? self.topLayoutGuide.bottomAnchor : self.view, attribute: attribute,
+																							multiplier: 1, constant: 0))
+			} else {
+				// Fallback on earlier versions
+				view.addConstraint(NSLayoutConstraint(item: topView, attribute: attribute,
+																							relatedBy: .equal, toItem: self.view, attribute: attribute,
+																							multiplier: 1, constant: 0))
+			}
     }
 
     view.addConstraint(NSLayoutConstraint(item: bottomContainer, attribute: .height,
