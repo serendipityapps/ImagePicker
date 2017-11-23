@@ -17,11 +17,13 @@ open class TopView: UIView {
   var configuration = Configuration()
 
   var currentFlashIndex = 0
-  let flashButtonTitles = ["AUTO", "ON", "OFF"]
+	lazy var flashButtonTitles: [String] = {
+		return [self.configuration.flashButtonTitleAUTO, self.configuration.flashButtonTitleON, self.configuration.flashButtonTitleOFF]
+	}()
 
   open lazy var flashButton: UIButton = { [unowned self] in
     let button = UIButton()
-    button.setImage(AssetManager.getImage("AUTO").withRenderingMode(.alwaysTemplate), for: UIControlState())
+    button.setImage(self.configuration.flashButtonImageAUTO, for: UIControlState())
     button.setTitle("AUTO", for: UIControlState())
     button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
     button.setTitleColor(self.configuration.cameraControlTintColor, for: UIControlState())
@@ -29,18 +31,14 @@ open class TopView: UIView {
     button.titleLabel?.font = self.configuration.flashButtonFont
     button.addTarget(self, action: #selector(flashButtonDidPress(_:)), for: .touchUpInside)
     button.contentHorizontalAlignment = .left
-		button.tintColor = self.configuration.cameraControlTintColor
-
     return button
     }()
 
   open lazy var rotateCamera: UIButton = { [unowned self] in
     let button = UIButton()
-    button.setImage(AssetManager.getImage("cameraIcon").withRenderingMode(.alwaysTemplate), for: UIControlState())
+    button.setImage(self.configuration.cameraRotationIconImage, for: UIControlState())
     button.addTarget(self, action: #selector(rotateCameraButtonDidPress(_:)), for: .touchUpInside)
     button.imageView?.contentMode = .center
-		button.tintColor = self.configuration.cameraControlTintColor
-
     return button
     }()
 
@@ -103,9 +101,17 @@ open class TopView: UIView {
 
     let newTitle = flashButtonTitles[currentFlashIndex]
 
-    button.setImage(AssetManager.getImage(newTitle), for: UIControlState())
+		switch newTitle {
+		case self.configuration.flashButtonTitleAUTO:
+			button.setImage(self.configuration.flashButtonImageAUTO, for: UIControlState())
+		case self.configuration.flashButtonTitleON:
+			button.setImage(self.configuration.flashButtonImageON, for: UIControlState())
+		case self.configuration.flashButtonTitleOFF:
+			button.setImage(self.configuration.flashButtonImageOFF, for: UIControlState())
+		default:
+			break
+		}
     button.setTitle(newTitle, for: UIControlState())
-
     delegate?.flashButtonDidPress(newTitle)
   }
 

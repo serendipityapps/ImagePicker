@@ -38,7 +38,7 @@ open class ImageGalleryView: UIView {
     let layout = ImageGalleryLayout(configuration: self.configuration)
     layout.scrollDirection = .horizontal
     layout.minimumInteritemSpacing = self.configuration.cellSpacing
-    layout.minimumLineSpacing = 2
+    layout.minimumLineSpacing = self.configuration.cellSpacing
     layout.sectionInset = UIEdgeInsets(top: 0, left: configuration.cellSpacing, bottom: 0, right: configuration.cellSpacing)
 
     return layout

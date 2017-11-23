@@ -43,6 +43,10 @@ public struct Configuration {
   public var settingsTitle = "Settings"
   public var requestPermissionTitle = "Permission denied"
   public var requestPermissionMessage = "Please, allow the application to access to your photo library."
+	
+	public var flashButtonTitleAUTO = "AUTO"
+	public var flashButtonTitleON = "ON"
+	public var flashButtonTitleOFF = "OFF"
 
   // MARK: Dimensions
 
@@ -74,6 +78,12 @@ public struct Configuration {
     return view
   }()
 
+	public var flashButtonImageAUTO = AssetManager.getImage("AUTO")
+	public var flashButtonImageON = AssetManager.getImage("ON")
+	public var flashButtonImageOFF = AssetManager.getImage("OFF")
+	
+	public var cameraRotationIconImage = AssetManager.getImage("cameraIcon")
+	
   public init() {}
 }
 

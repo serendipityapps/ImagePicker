@@ -35,6 +35,9 @@ class ImageGalleryViewCell: UICollectionViewCell {
     accessibilityLabel = "Photo"
 
     setupConstraints()
+		
+		imageView.layer.cornerRadius = 4
+		selectedImageView.layer.cornerRadius = 4
   }
 
   required init?(coder aDecoder: NSCoder) {
