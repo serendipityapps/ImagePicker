@@ -49,7 +49,6 @@ open class BottomContainerView: UIView {
 		button.tintColor = self.configuration.cancelButtonTextColor
 		button.tag = ActionButtonState.cancel.rawValue
 		button.contentEdgeInsets = UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 12)
-		button.layer.cornerRadius = button.bounds.size.height/2
 		button.clipsToBounds = true
 		return button
 		}()
@@ -98,6 +97,7 @@ open class BottomContainerView: UIView {
     stackView.addGestureRecognizer(tapGestureRecognizer)
 
     setupConstraints()
+		actionButton.layer.cornerRadius = actionButton.bounds.size.height/2
   }
 	
 	func configureActionButton(_ isDoneButton: Bool) {
@@ -114,6 +114,7 @@ open class BottomContainerView: UIView {
 			actionButton.tintColor = self.configuration.cancelButtonTextColor
 			actionButton.tag = ActionButtonState.cancel.rawValue
 		}
+		actionButton.layer.cornerRadius = actionButton.bounds.size.height/2
 	}
 
   // MARK: - Action methods

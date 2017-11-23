@@ -20,7 +20,7 @@ protocol ImageGalleryPanGestureDelegate: class {
 
 open class ImageGalleryView: UIView {
 
-  var configuration = Configuration()
+	let configuration: Configuration
 
   lazy open var collectionView: UICollectionView = { [unowned self] in
     let collectionView = UICollectionView(frame: CGRect.zero,
@@ -87,12 +87,15 @@ open class ImageGalleryView: UIView {
   public init(configuration: Configuration? = nil) {
     if let configuration = configuration {
       self.configuration = configuration
-    }
+		} else {
+			self.configuration = Configuration()
+		}
     super.init(frame: .zero)
     configure()
   }
 
   override init(frame: CGRect) {
+		self.configuration = Configuration()
     super.init(frame: frame)
     configure()
   }
