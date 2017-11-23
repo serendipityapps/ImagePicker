@@ -1,7 +1,7 @@
 import AVFoundation
 import UIKit
 
-public struct Configuration {
+public class Configuration {
 
   // MARK: Colors
 
