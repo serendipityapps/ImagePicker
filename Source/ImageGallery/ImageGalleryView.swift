@@ -107,8 +107,7 @@ open class ImageGalleryView: UIView {
   func configure() {
     backgroundColor = configuration.galleryBackgroundColor
 
-    collectionView.register(ImageGalleryViewCell.self,
-                            forCellWithReuseIdentifier: CollectionView.reusableIdentifier)
+		self.configuration.registerCollectionViewCell(in: collectionView)
 
     [collectionView, topSeparator].forEach { addSubview($0) }
 
@@ -209,44 +208,6 @@ extension ImageGalleryView: UICollectionViewDelegateFlowLayout {
 extension ImageGalleryView: UICollectionViewDelegate {
 
   public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    guard let cell = collectionView.cellForItem(at: indexPath)
-      as? ImageGalleryViewCell else { return }
-    if configuration.allowMultiplePhotoSelection == false {
-      // Clear selected photos array
-      for asset in self.selectedStack.assets {
-        self.selectedStack.dropAsset(asset)
-      }
-      // Animate deselecting photos for any selected visible cells
-      guard let visibleCells = collectionView.visibleCells as? [ImageGalleryViewCell] else { return }
-      for cell in visibleCells where cell.selectedImageView.image != nil {
-        UIView.animate(withDuration: 0.2, animations: {
-          cell.selectedImageView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-        }, completion: { _ in
-          cell.selectedImageView.image = nil
-        })
-      }
-    }
-
-    let asset = assets[(indexPath as NSIndexPath).row]
-
-    AssetManager.resolveAsset(asset, size: CGSize(width: 100, height: 100)) { image in
-      guard image != nil else { return }
-
-      if cell.selectedImageView.image != nil {
-        UIView.animate(withDuration: 0.2, animations: {
-          cell.selectedImageView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-          }, completion: { _ in
-            cell.selectedImageView.image = nil
-        })
-        self.selectedStack.dropAsset(asset)
-      } else if self.imageLimit == 0 || self.imageLimit > self.selectedStack.assets.count {
-        cell.selectedImageView.image = AssetManager.getImage("selectedImageGallery")
-        cell.selectedImageView.transform = CGAffineTransform(scaleX: 0, y: 0)
-        UIView.animate(withDuration: 0.2, animations: {
-          cell.selectedImageView.transform = CGAffineTransform.identity
-        })
-        self.selectedStack.pushAsset(asset)
-      }
-    }
+   	self.configuration.imageGalleryView(self, collectionView, didSelectItemAt: indexPath)
   }
 }

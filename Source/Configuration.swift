@@ -87,6 +87,93 @@ public struct Configuration {
 	
 	public var cameraRotationIconImage = AssetManager.getImage("cameraIcon")
 	
+	
+	private let collectionCellReuseIdentifier = "CollectionViewReusableIdentifier"
+	
+	/// Override these methods to provide custom cells and selection
+	public func registerCollectionViewCell(in collectionView: UICollectionView) {
+		collectionView.register(ImageGalleryViewCell.self,
+														forCellWithReuseIdentifier: collectionCellReuseIdentifier)
+	}
+	
+	public func imageGalleryView(_ imageGalleryView: ImageGalleryView, _ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+		
+		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: collectionCellReuseIdentifier,
+																												for: indexPath) as? ImageGalleryViewCell else { return UICollectionViewCell() }
+		
+		let asset = imageGalleryView.assets[(indexPath as NSIndexPath).row]
+		
+		AssetManager.resolveAsset(asset, size: CGSize(width: 160, height: 240)) { image in
+			if let image = image {
+				cell.configureCell(image)
+				
+				if (indexPath as NSIndexPath).row == 0 && imageGalleryView.shouldTransform {
+					cell.transform = CGAffineTransform(scaleX: 0, y: 0)
+					
+					UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: UIViewAnimationOptions(), animations: {
+						cell.transform = CGAffineTransform.identity
+					}) { _ in }
+					
+					imageGalleryView.shouldTransform = false
+				}
+				
+				if imageGalleryView.selectedStack.containsAsset(asset) {
+					cell.selectedImageView.image = AssetManager.getImage("selectedImageGallery")
+					cell.selectedImageView.alpha = 1
+					cell.selectedImageView.transform = CGAffineTransform.identity
+				} else {
+					cell.selectedImageView.image = nil
+				}
+				cell.duration = asset.duration
+			}
+		}
+		
+		return cell
+	}
+
+	public func imageGalleryView(_ imageGalleryView: ImageGalleryView, _ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+		
+		guard let cell = collectionView.cellForItem(at: indexPath)
+			as? ImageGalleryViewCell else { return }
+		if self.allowMultiplePhotoSelection == false {
+			// Clear selected photos array
+			for asset in imageGalleryView.selectedStack.assets {
+				imageGalleryView.selectedStack.dropAsset(asset)
+			}
+			// Animate deselecting photos for any selected visible cells
+			guard let visibleCells = collectionView.visibleCells as? [ImageGalleryViewCell] else { return }
+			for cell in visibleCells where cell.selectedImageView.image != nil {
+				UIView.animate(withDuration: 0.2, animations: {
+					cell.selectedImageView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+				}, completion: { _ in
+					cell.selectedImageView.image = nil
+				})
+			}
+		}
+		
+		let asset = imageGalleryView.assets[(indexPath as NSIndexPath).row]
+		
+		AssetManager.resolveAsset(asset, size: CGSize(width: 100, height: 100)) { image in
+			guard image != nil else { return }
+			
+			if cell.selectedImageView.image != nil {
+				UIView.animate(withDuration: 0.2, animations: {
+					cell.selectedImageView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+				}, completion: { _ in
+					cell.selectedImageView.image = nil
+				})
+				imageGalleryView.selectedStack.dropAsset(asset)
+			} else if imageGalleryView.imageLimit == 0 || imageGalleryView.imageLimit > imageGalleryView.selectedStack.assets.count {
+				cell.selectedImageView.image = AssetManager.getImage("selectedImageGallery")
+				cell.selectedImageView.transform = CGAffineTransform(scaleX: 0, y: 0)
+				UIView.animate(withDuration: 0.2, animations: {
+					cell.selectedImageView.transform = CGAffineTransform.identity
+				})
+				imageGalleryView.selectedStack.pushAsset(asset)
+			}
+		}
+	}
+	
   public init() {}
 }
 
