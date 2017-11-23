@@ -13,7 +13,7 @@ class ButtonPicker: UIButton {
     static let buttonBorderSize: CGFloat = 68
   }
 
-  var configuration = Configuration()
+	let configuration: Configuration
 
   lazy var numberLabel: UILabel = { [unowned self] in
     let label = UILabel()
@@ -30,12 +30,15 @@ class ButtonPicker: UIButton {
   public init(configuration: Configuration? = nil) {
     if let configuration = configuration {
       self.configuration = configuration
-    }
+		} else {
+			self.configuration = Configuration()
+		}
     super.init(frame: .zero)
     configure()
   }
 
   override init(frame: CGRect) {
+		self.configuration = Configuration()
     super.init(frame: frame)
     configure()
   }
@@ -81,6 +84,7 @@ class ButtonPicker: UIButton {
 		setTitleColor(self.configuration.cameraShutterControlTextColor, for: .normal)
 		numberLabel.textColor = self.configuration.cameraShutterControlTextColor
     layer.cornerRadius = Dimensions.buttonSize / 2
+		self.clipsToBounds = true
     accessibilityLabel = "Take photo"
     addTarget(self, action: #selector(pickerButtonDidPress(_:)), for: .touchUpInside)
     addTarget(self, action: #selector(pickerButtonDidHighlight(_:)), for: .touchDown)
