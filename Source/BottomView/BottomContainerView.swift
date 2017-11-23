@@ -5,6 +5,26 @@ enum ActionButtonState: Int {
 	case done
 }
 
+extension UIButton {
+	private func imageWithColor(color: UIColor) -> UIImage? {
+		let rect = CGRect(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
+		UIGraphicsBeginImageContext(rect.size)
+		let context = UIGraphicsGetCurrentContext()
+		
+		context?.setFillColor(color.cgColor)
+		context?.fill(rect)
+		
+		let image = UIGraphicsGetImageFromCurrentImageContext()
+		UIGraphicsEndImageContext()
+		
+		return image
+	}
+	
+	func setBackgroundColor(_ color: UIColor, for state: UIControlState) {
+		self.setBackgroundImage(imageWithColor(color: color), for: state)
+	}
+}
+
 protocol BottomContainerViewDelegate: class {
 
   func pickerButtonDidPress()
@@ -45,7 +65,8 @@ open class BottomContainerView: UIView {
 		button.setTitleColor(self.configuration.cancelButtonTextColor, for: UIControlState())
 		button.titleLabel?.font = self.configuration.doneButtonFont
 		button.addTarget(self, action: #selector(actionButtonDidPress(_:)), for: .touchUpInside)
-		button.backgroundColor = self.configuration.cancelButtonBackgroundColor
+		button.setBackgroundColor(self.configuration.cancelButtonBackgroundColor, for: .normal)
+		button.setBackgroundColor(self.configuration.cancelButtonHighlightBackgroundColor, for: .highlighted)
 		button.tintColor = self.configuration.cancelButtonTextColor
 		button.tag = ActionButtonState.cancel.rawValue
 		button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
@@ -103,13 +124,15 @@ open class BottomContainerView: UIView {
 		if isDoneButton {
 			actionButton.setTitle(self.configuration.doneButtonTitle, for: UIControlState())
 			actionButton.setTitleColor(self.configuration.doneButtonTextColor, for: UIControlState())
-			actionButton.backgroundColor = self.configuration.doneButtonBackgroundColor
+			actionButton.setBackgroundColor(self.configuration.doneButtonBackgroundColor, for: .normal)
+			actionButton.setBackgroundColor(self.configuration.doneButtonHighlightBackgroundColor, for: .highlighted)
 			actionButton.tintColor = self.configuration.doneButtonTextColor
 			actionButton.tag = ActionButtonState.done.rawValue
 		} else {
 			actionButton.setTitle(self.configuration.cancelButtonTitle, for: UIControlState())
 			actionButton.setTitleColor(self.configuration.cancelButtonTextColor, for: UIControlState())
-			actionButton.backgroundColor = self.configuration.cancelButtonBackgroundColor
+			actionButton.setBackgroundColor(self.configuration.cancelButtonBackgroundColor, for: .normal)
+			actionButton.setBackgroundColor(self.configuration.cancelButtonHighlightBackgroundColor, for: .highlighted)
 			actionButton.tintColor = self.configuration.cancelButtonTextColor
 			actionButton.tag = ActionButtonState.cancel.rawValue
 		}
