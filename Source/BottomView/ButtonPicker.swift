@@ -76,8 +76,8 @@ class ButtonPicker: UIButton {
   // MARK: - Configuration
 
   func setupButton() {
-    backgroundColor = self.configuration.photosToUseBackgroundColor
-		numberLabel.textColor = self.configuration.photosToUseTextColor
+    backgroundColor = self.configuration.cameraShutterControlBackgroundColor
+		numberLabel.textColor = self.configuration.cameraShutterControlTextColor
     layer.cornerRadius = Dimensions.buttonSize / 2
     accessibilityLabel = "Take photo"
     addTarget(self, action: #selector(pickerButtonDidPress(_:)), for: .touchUpInside)
@@ -92,14 +92,14 @@ class ButtonPicker: UIButton {
   }
 
   @objc func pickerButtonDidPress(_ button: UIButton) {
-    backgroundColor = self.configuration.photosToUseBackgroundColor
-    numberLabel.textColor = self.configuration.photosToUseTextColor
+    backgroundColor = self.configuration.cameraShutterControlBackgroundColor
+    numberLabel.textColor = self.configuration.cameraShutterControlTextColor
     numberLabel.sizeToFit()
     delegate?.buttonDidPress()
   }
 
   @objc func pickerButtonDidHighlight(_ button: UIButton) {
-    numberLabel.textColor = self.configuration.photosToUseTextColor
+    numberLabel.textColor = self.configuration.cameraShutterControlTextColor
     backgroundColor = UIColor(red: 0.3, green: 0.3, blue: 0.3, alpha: 1)
   }
 }

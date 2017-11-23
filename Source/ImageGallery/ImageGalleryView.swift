@@ -39,7 +39,7 @@ open class ImageGalleryView: UIView {
     layout.scrollDirection = .horizontal
     layout.minimumInteritemSpacing = self.configuration.cellSpacing
     layout.minimumLineSpacing = 2
-    layout.sectionInset = UIEdgeInsets.zero
+    layout.sectionInset = UIEdgeInsets(top: 0, left: configuration.cellSpacing, bottom: 0, right: configuration.cellSpacing)
 
     return layout
     }()

@@ -48,8 +48,9 @@ open class BottomContainerView: UIView {
 		button.backgroundColor = self.configuration.cancelButtonBackgroundColor
 		button.tintColor = self.configuration.cancelButtonTextColor
 		button.tag = ActionButtonState.cancel.rawValue
-		button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
+		button.contentEdgeInsets = UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 12)
 		button.layer.cornerRadius = button.bounds.size.height/2
+		button.clipsToBounds = true
 		return button
 		}()
 

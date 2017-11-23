@@ -18,9 +18,7 @@ public struct Configuration {
 	public var bottomContainerColor = UIColor(red: 0.09, green: 0.11, blue: 0.13, alpha: 1)
 	public var cameraShutterControlBackgroundColor = UIColor.white
 	public var cameraShutterControlTextColor = UIColor.black
-	public var photosToUseBackgroundColor = UIColor.white
 	public var photosToUseBorderColor = UIColor.white
-	public var photosToUseTextColor = UIColor.white
 	public var cancelButtonTextColor = UIColor.white
 	public var cancelButtonBackgroundColor = UIColor.black
 	public var doneButtonTextColor = UIColor.white
