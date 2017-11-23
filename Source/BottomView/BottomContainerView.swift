@@ -1,5 +1,10 @@
 import UIKit
 
+enum ActionButtonState: Int {
+	case cancel
+	case done
+}
+
 protocol BottomContainerViewDelegate: class {
 
   func pickerButtonDidPress()
@@ -18,7 +23,7 @@ open class BottomContainerView: UIView {
 
   lazy var pickerButton: ButtonPicker = { [unowned self] in
     let pickerButton = ButtonPicker(configuration: self.configuration)
-    pickerButton.setTitleColor(self.configuration.controlContrastTextTintColor, for: UIControlState())
+    pickerButton.setTitleColor(self.configuration.cameraShutterControlTextColor, for: UIControlState())
     pickerButton.delegate = self
     pickerButton.numberLabel.isHidden = !self.configuration.showsImageCountLabel
 
@@ -28,23 +33,23 @@ open class BottomContainerView: UIView {
   lazy var borderPickerButton: UIView = {
     let view = UIView()
     view.backgroundColor = UIColor.clear
-    view.layer.borderColor = self.configuration.bottomControlTintColor.cgColor
+    view.layer.borderColor = self.configuration.cameraShutterControlBackgroundColor.cgColor
     view.layer.borderWidth = ButtonPicker.Dimensions.borderWidth
     view.layer.cornerRadius = ButtonPicker.Dimensions.buttonBorderSize / 2
-
     return view
     }()
-
-  open lazy var doneButton: UIButton = { [unowned self] in
-    let button = UIButton()
-    button.setTitle(self.configuration.cancelButtonTitle, for: UIControlState())
-		button.setTitleColor(self.configuration.bottomControlTintColor, for: UIControlState())
-    button.titleLabel?.font = self.configuration.doneButton
-    button.addTarget(self, action: #selector(doneButtonDidPress(_:)), for: .touchUpInside)
-		button.tintColor = self.configuration.bottomControlTintColor
-
-    return button
-    }()
+	
+	open lazy var actionButton: UIButton = { [unowned self] in
+		let button = UIButton()
+		button.setTitle(self.configuration.cancelButtonTitle, for: UIControlState())
+		button.setTitleColor(self.configuration.cancelButtonTextColor, for: UIControlState())
+		button.titleLabel?.font = self.configuration.doneButtonFont
+		button.addTarget(self, action: #selector(actionButtonDidPress(_:)), for: .touchUpInside)
+		button.backgroundColor = self.configuration.cancelButtonBackgroundColor
+		button.tintColor = self.configuration.cancelButtonTextColor
+		button.tag = ActionButtonState.cancel.rawValue
+		return button
+		}()
 
 	lazy var stackView = ImageStackView(frame: CGRect(x: 0, y: 0, width: 80, height: 80), configuration: self.configuration)
 
@@ -80,7 +85,7 @@ open class BottomContainerView: UIView {
   }
 
   func configure() {
-    [borderPickerButton, pickerButton, doneButton, stackView, topSeparator].forEach {
+    [borderPickerButton, pickerButton, actionButton, stackView, topSeparator].forEach {
       addSubview($0)
       $0.translatesAutoresizingMaskIntoConstraints = false
     }
@@ -91,17 +96,33 @@ open class BottomContainerView: UIView {
 
     setupConstraints()
   }
+	
+	func configureActionButton(_ isDoneButton: Bool) {
+		if isDoneButton {
+			actionButton.setTitle(self.configuration.doneButtonTitle, for: UIControlState())
+			actionButton.setTitleColor(self.configuration.doneButtonTextColor, for: UIControlState())
+			actionButton.backgroundColor = self.configuration.doneButtonBackgroundColor
+			actionButton.tintColor = self.configuration.doneButtonTextColor
+			actionButton.tag = ActionButtonState.done.rawValue
+		} else {
+			actionButton.setTitle(self.configuration.cancelButtonTitle, for: UIControlState())
+			actionButton.setTitleColor(self.configuration.cancelButtonTextColor, for: UIControlState())
+			actionButton.backgroundColor = self.configuration.cancelButtonBackgroundColor
+			actionButton.tintColor = self.configuration.cancelButtonTextColor
+			actionButton.tag = ActionButtonState.cancel.rawValue
+		}
+	}
 
   // MARK: - Action methods
 
-  @objc func doneButtonDidPress(_ button: UIButton) {
-    if button.currentTitle == configuration.cancelButtonTitle {
-      delegate?.cancelButtonDidPress()
-    } else {
-      delegate?.doneButtonDidPress()
-    }
+  @objc func actionButtonDidPress(_ button: UIButton) {
+		if button.tag == ActionButtonState.cancel.rawValue {
+			delegate?.cancelButtonDidPress()
+		} else if button.tag == ActionButtonState.done.rawValue {
+			delegate?.doneButtonDidPress()
+		}
   }
-
+	
   @objc func handleTapGestureRecognizer(_ recognizer: UITapGestureRecognizer) {
     delegate?.imageStackViewDidPress()
   }

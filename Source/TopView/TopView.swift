@@ -26,7 +26,7 @@ open class TopView: UIView {
     button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 4, bottom: 0, right: 0)
     button.setTitleColor(self.configuration.cameraControlTintColor, for: UIControlState())
     button.setTitleColor(self.configuration.cameraControlTintColor, for: .highlighted)
-    button.titleLabel?.font = self.configuration.flashButton
+    button.titleLabel?.font = self.configuration.flashButtonFont
     button.addTarget(self, action: #selector(flashButtonDidPress(_:)), for: .touchUpInside)
     button.contentHorizontalAlignment = .left
 		button.tintColor = self.configuration.cameraControlTintColor

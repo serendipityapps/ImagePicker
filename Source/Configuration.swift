@@ -12,16 +12,24 @@ public struct Configuration {
   public var noImagesTextColor = UIColor(red: 0.86, green: 0.86, blue: 0.86, alpha: 1)
   public var noCameraTextColor = UIColor(red: 0.86, green: 0.86, blue: 0.86, alpha: 1)
   public var settingsColor = UIColor.white
-  public var bottomContainerColor = UIColor(red: 0.09, green: 0.11, blue: 0.13, alpha: 1)
+	
 	public var cameraControlTintColor = UIColor.white
-	public var bottomControlTintColor = UIColor.white
-	public var controlContrastTextTintColor = UIColor.black
+
+	public var bottomContainerColor = UIColor(red: 0.09, green: 0.11, blue: 0.13, alpha: 1)
+	public var cameraShutterControlBackgroundColor = UIColor.white
+	public var cameraShutterControlTextColor = UIColor.black
+	public var photosToUseBorderColor = UIColor.white
+	public var photosToUseTextColor = UIColor.white
+	public var cancelButtonTextColor = UIColor.white
+	public var cancelButtonBackgroundColor = UIColor.black
+	public var doneButtonTextColor = UIColor.white
+	public var doneButtonBackgroundColor = UIColor.black
 
   // MARK: Fonts
 
   public var numberLabelFont = UIFont.systemFont(ofSize: 19, weight: UIFont.Weight.bold)
-  public var doneButton = UIFont.systemFont(ofSize: 19, weight: UIFont.Weight.medium)
-  public var flashButton = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.medium)
+  public var doneButtonFont = UIFont.systemFont(ofSize: 19, weight: UIFont.Weight.medium)
+  public var flashButtonFont = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.medium)
   public var noImagesFont = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.medium)
   public var noCameraFont = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.medium)
   public var settingsFont = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.medium)

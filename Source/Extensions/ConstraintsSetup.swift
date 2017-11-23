@@ -36,7 +36,7 @@ extension BottomContainerView {
         multiplier: 1, constant: ImageStackView.Dimensions.imageSize))
     }
 
-    addConstraint(NSLayoutConstraint(item: doneButton, attribute: .centerY,
+    addConstraint(NSLayoutConstraint(item: actionButton, attribute: .centerY,
       relatedBy: .equal, toItem: self, attribute: .centerY,
       multiplier: 1, constant: 0))
 
@@ -46,7 +46,7 @@ extension BottomContainerView {
 
     let screenSize = Helper.screenSizeForOrientation()
 
-    addConstraint(NSLayoutConstraint(item: doneButton, attribute: .centerX,
+    addConstraint(NSLayoutConstraint(item: actionButton, attribute: .centerX,
       relatedBy: .equal, toItem: self, attribute: .right,
       multiplier: 1, constant: -(screenSize.width - (ButtonPicker.Dimensions.buttonBorderSize + screenSize.width)/2)/2))
 

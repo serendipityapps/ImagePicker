@@ -83,13 +83,6 @@ open class ImagePickerController: UIViewController {
   var statusBarHidden = true
 
   fileprivate var isTakingPicture = false
-  open var doneButtonTitle: String? {
-    didSet {
-      if let doneButtonTitle = doneButtonTitle {
-        bottomContainer.doneButton.setTitle(doneButtonTitle, for: UIControlState())
-      }
-    }
-  }
 
   // MARK: - Initialization
 
@@ -268,9 +261,7 @@ open class ImagePickerController: UIViewController {
   @objc func adjustButtonTitle(_ notification: Notification) {
     guard let sender = notification.object as? ImageStack else { return }
 
-    let title = !sender.assets.isEmpty ?
-      configuration.doneButtonTitle : configuration.cancelButtonTitle
-    bottomContainer.doneButton.setTitle(title, for: UIControlState())
+		bottomContainer.configureActionButton(!sender.assets.isEmpty)
   }
 
   // MARK: - Helpers
@@ -432,7 +423,7 @@ extension ImagePickerController: CameraViewDelegate {
 
     UIView.animate(withDuration: 0.25, animations: {
       [self.topView.rotateCamera, self.bottomContainer.pickerButton,
-       self.bottomContainer.stackView, self.bottomContainer.doneButton].forEach {
+       self.bottomContainer.stackView, self.bottomContainer.actionButton].forEach {
         $0.transform = rotate
       }
 
