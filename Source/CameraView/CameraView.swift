@@ -46,7 +46,8 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   }()
 
 	lazy var overlayView: OverlayView = {
-		let nib = UINib(nibName: "OverlayView", bundle: nil)
+		var bundle = Bundle(for: OverlayView.self)
+		let nib = UINib(nibName: "OverlayView", bundle: bundle)
 		let view = nib.instantiate(withOwner: self, options: nil).first as! OverlayView
 		view.backgroundColor = UIColor.clear
 		view.viewPortContainerView.backgroundColor = UIColor.clear
