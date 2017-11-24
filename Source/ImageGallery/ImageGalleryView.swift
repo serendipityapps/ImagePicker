@@ -73,14 +73,14 @@ open class ImageGalleryView: UIView {
     }()
 
   open lazy var selectedStack = ImageStack()
-  lazy var assets = [PHAsset]()
+  public lazy var assets = [PHAsset]()
 
   weak var delegate: ImageGalleryPanGestureDelegate?
   var collectionSize: CGSize?
   var shouldTransform = false
   var imagesBeforeLoading = 0
   var fetchResult: PHFetchResult<AnyObject>?
-  var imageLimit = 0
+  public var imageLimit = 0
 
   // MARK: - Initializers
 
