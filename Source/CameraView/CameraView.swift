@@ -266,7 +266,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 
 		var cropRect: CGRect?
 		if configuration.cameraHasOverlay {
-			cropRect = previewLayer.convert(overlayView.viewPortContainerView.bounds, from: overlayView.layer)
+			cropRect = previewLayer.convert(overlayView.viewPortContainerView.frame, from: overlayView.layer)
 		}
 		cameraMan.takePhoto(previewLayer, location: locationManager?.latestLocation, cropRect: cropRect) {
       completion()
