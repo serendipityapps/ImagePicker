@@ -11,7 +11,7 @@ protocol CameraViewDelegate: class {
 
 class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate {
 
-  var configuration = Configuration()
+	let configuration: Configuration
 
   lazy var blurView: UIVisualEffectView = { [unowned self] in
     let effect = UIBlurEffect(style: .dark)
@@ -44,6 +44,18 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 
     return view
   }()
+
+	lazy var overlayView: OverlayView = {
+		let nib = UINib(nibName: "OverlayView", bundle: nil)
+		let view = nib.instantiate(withOwner: self, options: nil).first as! OverlayView
+		view.backgroundColor = UIColor.clear
+		view.viewPortContainerView.backgroundColor = UIColor.clear
+		view.topleftImageView.image = self.configuration.overlayTopLeftCornerPiece
+		view.topRightImageView.image = self.configuration.overlayTopLeftCornerPiece
+		view.bottomleftImageView.image = self.configuration.overlayTopLeftCornerPiece
+		view.bottomRightImageView.image = self.configuration.overlayTopLeftCornerPiece
+		return view
+	}()
 
   lazy var noCameraLabel: UILabel = { [unowned self] in
     let label = UILabel()
@@ -105,7 +117,9 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   public init(configuration: Configuration? = nil) {
     if let configuration = configuration {
       self.configuration = configuration
-    }
+		} else {
+			self.configuration = Configuration()
+		}
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -123,6 +137,9 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     view.backgroundColor = configuration.mainColor
 
     view.addSubview(containerView)
+		if configuration.cameraHasOverlay {
+			containerView.addSubview(overlayView)
+		}
     containerView.addSubview(blurView)
 
     [focusImageView, capturedImageView].forEach {
@@ -180,6 +197,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 
     blurView.frame = view.bounds
     containerView.frame = view.bounds
+		overlayView.frame = view.bounds
     capturedImageView.frame = view.bounds
   }
 

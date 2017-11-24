@@ -71,6 +71,7 @@ open class Configuration {
   public var managesAudioSession = true
   public var allowPinchToZoom = true
   public var allowedOrientations = UIInterfaceOrientationMask.all
+	public var cameraHasOverlay = true
 
   // MARK: Images
   public var indicatorView: UIView = {
@@ -86,7 +87,8 @@ open class Configuration {
 	public var flashButtonImageOFF = AssetManager.getImage("OFF")
 	
 	public var cameraRotationIconImage = AssetManager.getImage("cameraIcon")
-	
+
+	public var overlayTopLeftCornerPiece = AssetManager.getImage("cameraIcon")
 	
 	private let collectionCellReuseIdentifier = "CollectionViewReusableIdentifier"
 	
