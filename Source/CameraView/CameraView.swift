@@ -58,6 +58,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 		return view
 	}()
 
+	public var overlayTopConstraint: NSLayoutConstraint?
 	public var overlayBottomConstraint: NSLayoutConstraint?
 
   lazy var noCameraLabel: UILabel = { [unowned self] in
@@ -156,13 +157,13 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 			overlayView.translatesAutoresizingMaskIntoConstraints = false
 			view.addSubview(overlayView)
 
-			let top = NSLayoutConstraint(item: overlayView, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.top, multiplier: 1.0, constant: 0)
+			self.overlayTopConstraint = NSLayoutConstraint(item: overlayView, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.top, multiplier: 1.0, constant: 0)
 			let leading = NSLayoutConstraint(item: overlayView, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.leading, multiplier: 1.0, constant: 0)
 
 			let trailing = NSLayoutConstraint(item: overlayView, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.trailing, multiplier: 1.0, constant: 0)
 			self.overlayBottomConstraint = NSLayoutConstraint(item: overlayView, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 0)
 
-			NSLayoutConstraint.activate([trailing, overlayBottomConstraint!, top, leading])
+			NSLayoutConstraint.activate([trailing, overlayBottomConstraint!, overlayTopConstraint!, leading])
 		}
 
     view.addGestureRecognizer(tapGestureRecognizer)

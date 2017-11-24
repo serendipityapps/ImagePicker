@@ -167,21 +167,25 @@ class CameraMan {
         }
 
 				if let cropRect = cropRect {
-
-					func crop(_ image: UIImage, cropRect: CGRect) -> UIImage {
-						var rect = cropRect
-						rect.origin.x*=image.scale
-						rect.origin.y*=image.scale
-						rect.size.width*=image.scale
-						rect.size.height*=image.scale
-
-						let imageRef = image.cgImage!.cropping(to: rect)
-						let image = UIImage(cgImage: imageRef!, scale: image.scale, orientation: image.imageOrientation)
-						return image
+					
+					let originalSize: CGSize
+					let outputRect = previewLayer.metadataOutputRectConverted(fromLayerRect: cropRect)
+					
+					if (image.imageOrientation == UIImageOrientation.left || image.imageOrientation == UIImageOrientation.right) {
+						originalSize = CGSize(width: image.size.height, height: image.size.width)
+					} else {
+						originalSize = image.size
 					}
-
-					let cropped = crop(image, cropRect: cropRect)
-					self.savePhoto(cropped, location: location, completion: completion)
+					
+					let visualCropRect: CGRect = CGRect(x: outputRect.origin.x * originalSize.width, y: outputRect.origin.y * originalSize.height, width: outputRect.size.width * originalSize.width, height: outputRect.size.height * originalSize.height).integral
+					
+					if let visualCgImage = image.cgImage?.cropping(to: visualCropRect) {
+						let visualImage = UIImage(cgImage: visualCgImage, scale: 1.0, orientation: image.imageOrientation)
+						
+						self.savePhoto(visualImage, location: location, completion: completion)
+					} else {
+						fatalError("oops")
+					}
 				} else {
 					self.savePhoto(image, location: location, completion: completion)
 				}

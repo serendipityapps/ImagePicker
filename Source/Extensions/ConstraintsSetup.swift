@@ -77,9 +77,9 @@ extension TopView {
       relatedBy: .equal, toItem: self, attribute: .centerY,
       multiplier: 1, constant: 0))
 
-    addConstraint(NSLayoutConstraint(item: flashButton, attribute: .width,
-      relatedBy: .equal, toItem: nil, attribute: .notAnAttribute,
-      multiplier: 1, constant: 55))
+//    addConstraint(NSLayoutConstraint(item: flashButton, attribute: .width,
+//      relatedBy: .equal, toItem: nil, attribute: .notAnAttribute,
+//      multiplier: 1, constant: 55))
 
     if configuration.canRotateCamera {
       addConstraint(NSLayoutConstraint(item: rotateCamera, attribute: .right,
@@ -126,11 +126,11 @@ extension ImagePickerController {
 				if attribute == .top {
 					view.addConstraint(NSLayoutConstraint(item: topView, attribute: .top,
 																								relatedBy: .equal, toItem: self.view.safeAreaLayoutGuide, attribute: .top,
-																								multiplier: 1, constant: 0))
+																								multiplier: 1, constant: 8))
 				} else {
 					view.addConstraint(NSLayoutConstraint(item: topView, attribute: attribute,
 																								relatedBy: .equal, toItem: self.view, attribute: attribute,
-																								multiplier: 1, constant: 0))
+																								multiplier: 1, constant: 8))
 				}
 			} else {
 				// Fallback on earlier versions

@@ -283,6 +283,7 @@ open class ImagePickerController: UIViewController {
       }, completion: { _ in
         completion?()
     })
+		cameraController.overlayTopConstraint?.constant = topView.frame.maxY
 		cameraController.overlayBottomConstraint?.constant = 0
   }
 
@@ -315,6 +316,7 @@ open class ImagePickerController: UIViewController {
     galleryView.frame.origin.y = totalSize.height - bottomContainer.frame.height - constant
     galleryView.frame.size.height = constant
 
+		cameraController.overlayTopConstraint?.constant = topView.frame.maxY
 		cameraController.overlayBottomConstraint?.constant = -constant
   }
 
