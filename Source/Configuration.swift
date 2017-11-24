@@ -1,7 +1,7 @@
 import AVFoundation
 import UIKit
 
-public class Configuration {
+open class Configuration {
 
   // MARK: Colors
 
@@ -91,12 +91,12 @@ public class Configuration {
 	private let collectionCellReuseIdentifier = "CollectionViewReusableIdentifier"
 	
 	/// Override these methods to provide custom cells and selection
-	public func registerCollectionViewCell(in collectionView: UICollectionView) {
+	open func registerCollectionViewCell(in collectionView: UICollectionView) {
 		collectionView.register(ImageGalleryViewCell.self,
 														forCellWithReuseIdentifier: collectionCellReuseIdentifier)
 	}
 	
-	public func imageGalleryView(_ imageGalleryView: ImageGalleryView, _ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+	open func imageGalleryView(_ imageGalleryView: ImageGalleryView, _ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 		
 		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: collectionCellReuseIdentifier,
 																												for: indexPath) as? ImageGalleryViewCell else { return UICollectionViewCell() }
@@ -131,7 +131,7 @@ public class Configuration {
 		return cell
 	}
 
-	public func imageGalleryView(_ imageGalleryView: ImageGalleryView, _ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+	open func imageGalleryView(_ imageGalleryView: ImageGalleryView, _ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		
 		guard let cell = collectionView.cellForItem(at: indexPath)
 			as? ImageGalleryViewCell else { return }
