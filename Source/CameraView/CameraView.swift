@@ -58,6 +58,8 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 		return view
 	}()
 
+	public var overlayBottomConstraint: NSLayoutConstraint?
+
   lazy var noCameraLabel: UILabel = { [unowned self] in
     let label = UILabel()
     label.font = self.configuration.noCameraFont
@@ -108,6 +110,11 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   var animationTimer: Timer?
   var locationManager: LocationManager?
   var startOnFrontCamera: Bool = false
+	var cameraManCovered: CGRect = CGRect.zero {
+		didSet {
+
+		}
+	}
 
   private let minimumZoomFactor: CGFloat = 1.0
   private let maximumZoomFactor: CGFloat = 3.0
@@ -144,7 +151,18 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     }
 
 		if configuration.cameraHasOverlay {
+
+			overlayView.frame = view.bounds
+			overlayView.translatesAutoresizingMaskIntoConstraints = false
 			view.addSubview(overlayView)
+
+			let top = NSLayoutConstraint(item: overlayView, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.top, multiplier: 1.0, constant: 0)
+			let leading = NSLayoutConstraint(item: overlayView, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.leading, multiplier: 1.0, constant: 0)
+
+			let trailing = NSLayoutConstraint(item: overlayView, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.trailing, multiplier: 1.0, constant: 0)
+			self.overlayBottomConstraint = NSLayoutConstraint(item: overlayView, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 0)
+
+			NSLayoutConstraint.activate([trailing, overlayBottomConstraint!, top, leading])
 		}
 
     view.addGestureRecognizer(tapGestureRecognizer)

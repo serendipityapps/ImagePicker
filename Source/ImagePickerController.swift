@@ -279,6 +279,7 @@ open class ImagePickerController: UIViewController {
       }, completion: { _ in
         completion?()
     })
+		cameraController.overlayBottomConstraint?.constant = 0
   }
 
   open func showGalleryView() {
@@ -288,6 +289,7 @@ open class ImagePickerController: UIViewController {
       self.galleryView.collectionView.transform = CGAffineTransform.identity
       self.galleryView.collectionView.contentInset = UIEdgeInsets.zero
     })
+
   }
 
   open func expandGalleryView() {
@@ -307,6 +309,8 @@ open class ImagePickerController: UIViewController {
   func updateGalleryViewFrames(_ constant: CGFloat) {
     galleryView.frame.origin.y = totalSize.height - bottomContainer.frame.height - constant
     galleryView.frame.size.height = constant
+
+		cameraController.overlayBottomConstraint?.constant = constant
   }
 
   func enableGestures(_ enabled: Bool) {
