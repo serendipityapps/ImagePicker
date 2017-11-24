@@ -25,8 +25,6 @@ class OverlayView: UIView {
 
 	required init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
-
-		setup()
 	}
 
 	private func setup() {
