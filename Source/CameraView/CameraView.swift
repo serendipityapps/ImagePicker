@@ -264,7 +264,11 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
         })
     })
 
-    cameraMan.takePhoto(previewLayer, location: locationManager?.latestLocation) {
+		var cropRect: CGRect?
+		if configuration.cameraHasOverlay {
+			cropRect = previewLayer.convert(overlayView.viewPortContainerView.bounds, from: overlayView.layer)
+		}
+		cameraMan.takePhoto(previewLayer, location: locationManager?.latestLocation, cropRect: cropRect) {
       completion()
       self.delegate?.imageToLibrary()
     }
