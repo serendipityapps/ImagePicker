@@ -280,11 +280,10 @@ open class ImagePickerController: UIViewController {
       self.updateGalleryViewFrames(self.galleryView.topSeparator.frame.height)
       self.galleryView.collectionView.transform = CGAffineTransform.identity
       self.galleryView.collectionView.contentInset = UIEdgeInsets.zero
+			self.view.layoutIfNeeded()
       }, completion: { _ in
         completion?()
     })
-		cameraController.overlayTopConstraint?.constant = topView.frame.maxY
-		cameraController.overlayBottomConstraint?.constant = 0
   }
 
   open func showGalleryView() {
