@@ -139,15 +139,19 @@ open class ImagePickerController: UIViewController {
     galleryView.collectionView.transform = CGAffineTransform.identity
     galleryView.collectionView.contentInset = UIEdgeInsets.zero
 
-    galleryView.frame = CGRect(x: 0,
-                               y: totalSize.height - bottomContainer.frame.height - galleryHeight,
-                               width: totalSize.width,
-                               height: galleryHeight)
-    galleryView.updateFrames()
-    checkStatus()
+		galleryView.frame = CGRect(x: 0,
+															 y: totalSize.height - bottomContainer.frame.height,
+															 width: totalSize.width,
+															 height: galleryHeight)
+		galleryView.updateFrames()
+		showGalleryView()
+		checkStatus()
 
-    initialFrame = galleryView.frame
-    initialContentOffset = galleryView.collectionView.contentOffset
+		initialFrame = CGRect(x: 0,
+													y: totalSize.height - bottomContainer.frame.height - galleryHeight,
+													width: totalSize.width,
+													height: galleryHeight)
+		initialContentOffset = galleryView.collectionView.contentOffset
 
     applyOrientationTransforms()
   }
@@ -288,6 +292,7 @@ open class ImagePickerController: UIViewController {
       self.updateGalleryViewFrames(GestureConstants.minimumHeight)
       self.galleryView.collectionView.transform = CGAffineTransform.identity
       self.galleryView.collectionView.contentInset = UIEdgeInsets.zero
+			self.view.layoutIfNeeded()
     })
 
   }
@@ -310,7 +315,7 @@ open class ImagePickerController: UIViewController {
     galleryView.frame.origin.y = totalSize.height - bottomContainer.frame.height - constant
     galleryView.frame.size.height = constant
 
-		cameraController.overlayBottomConstraint?.constant = constant
+		cameraController.overlayBottomConstraint?.constant = -constant
   }
 
   func enableGestures(_ enabled: Bool) {
