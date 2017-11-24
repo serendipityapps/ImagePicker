@@ -138,14 +138,14 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     view.backgroundColor = configuration.mainColor
 
     view.addSubview(containerView)
-		if configuration.cameraHasOverlay {
-			containerView.addSubview(overlayView)
-		}
     containerView.addSubview(blurView)
-
     [focusImageView, capturedImageView].forEach {
       view.addSubview($0)
     }
+
+		if configuration.cameraHasOverlay {
+			view.addSubview(overlayView)
+		}
 
     view.addGestureRecognizer(tapGestureRecognizer)
 
