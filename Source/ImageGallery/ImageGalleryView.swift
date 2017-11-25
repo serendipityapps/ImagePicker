@@ -159,6 +159,7 @@ open class ImageGalleryView: UIView {
     AssetManager.fetch(withConfiguration: configuration) { assets in
       self.assets.removeAll()
       self.assets.append(contentsOf: assets)
+			self.displayNoImagesMessage(assets.isEmpty)
       self.collectionView.reloadData()
 
       completion?()

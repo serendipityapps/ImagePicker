@@ -3,7 +3,6 @@ import UIKit
 extension ImageGalleryView: UICollectionViewDataSource {
 
   public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    displayNoImagesMessage(assets.isEmpty)
     return assets.count
   }
 

@@ -80,7 +80,6 @@ open class ImagePickerController: UIViewController {
   var initialFrame: CGRect?
   var initialContentOffset: CGPoint?
   var numberOfCells: Int?
-  var statusBarHidden = true
 
   fileprivate var isTakingPicture = false
 
@@ -124,41 +123,42 @@ open class ImagePickerController: UIViewController {
       _ = try? AVAudioSession.sharedInstance().setActive(true)
     }
 
-    statusBarHidden = UIApplication.shared.isStatusBarHidden
-    UIApplication.shared.setStatusBarHidden(true, with: .fade)
-
-    self.handleRotation(nil)
+		self.setNeedsStatusBarAppearanceUpdate()
+		
+		applyOrientationTransforms()
+		
+		self.galleryView.displayNoImagesMessage(false)
+		
+		self.view.layoutIfNeeded()
+		
+		let galleryHeight: CGFloat = UIScreen.main.nativeBounds.height == 960
+			? configuration.galleryBarHeight : GestureConstants.minimumHeight
+		
+		galleryView.frame = CGRect(x: 0,
+															 y: totalSize.height - bottomContainer.frame.height - galleryHeight,
+															 width: totalSize.width,
+															 height: galleryHeight)
+		galleryView.updateFrames()
+		galleryView.collectionViewLayout.invalidateLayout()
+		self.updateGalleryViewFrames(GestureConstants.minimumHeight)
+		self.galleryView.collectionView.transform = CGAffineTransform.identity
+		self.galleryView.collectionView.contentInset = UIEdgeInsets.zero
+		self.view.layoutIfNeeded()
+		
+		initialFrame = galleryView.frame
+		initialContentOffset = galleryView.collectionView.contentOffset
   }
 
   open override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
 
-    let galleryHeight: CGFloat = UIScreen.main.nativeBounds.height == 960
-      ? configuration.galleryBarHeight : GestureConstants.minimumHeight
-
-    galleryView.collectionView.transform = CGAffineTransform.identity
-    galleryView.collectionView.contentInset = UIEdgeInsets.zero
-
-		galleryView.frame = CGRect(x: 0,
-															 y: totalSize.height - bottomContainer.frame.height,
-															 width: totalSize.width,
-															 height: galleryHeight)
-		galleryView.updateFrames()
-		showGalleryView()
 		checkStatus()
-
-		initialFrame = CGRect(x: 0,
-													y: totalSize.height - bottomContainer.frame.height - galleryHeight,
-													width: totalSize.width,
-													height: galleryHeight)
-		initialContentOffset = galleryView.collectionView.contentOffset
 
     applyOrientationTransforms()
   }
 
   open override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
-    UIApplication.shared.setStatusBarHidden(statusBarHidden, with: .fade)
   }
 
   open func resetAssets() {
@@ -174,6 +174,7 @@ open class ImagePickerController: UIViewController {
     PHPhotoLibrary.requestAuthorization { (authorizationStatus) -> Void in
       DispatchQueue.main.async {
         if authorizationStatus == .denied {
+					self.galleryView.displayNoImagesMessage(true)
           self.presentAskPermissionAlert()
         } else if authorizationStatus == .authorized {
           self.permissionGranted()
@@ -273,6 +274,10 @@ open class ImagePickerController: UIViewController {
   open override var prefersStatusBarHidden: Bool {
     return true
   }
+	
+	open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+		return .fade
+	}
 
   open func collapseGalleryView(_ completion: (() -> Void)?) {
     galleryView.collectionViewLayout.invalidateLayout()
