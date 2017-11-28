@@ -73,6 +73,9 @@ open class Configuration {
   public var allowedOrientations = UIInterfaceOrientationMask.all
 	public var cameraHasOverlay = true
 
+	public var cancelButtonHandler: (() -> Void)?
+	public var doneButtonHandler: (() -> Void)?
+	
   // MARK: Images
   public var indicatorView: UIView = {
     let view = UIView()

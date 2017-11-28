@@ -369,10 +369,12 @@ extension ImagePickerController: BottomContainerViewDelegate {
       images = AssetManager.resolveAssets(stack.assets)
     }
 
+		self.configuration.doneButtonHandler?()
     delegate?.doneButtonDidPress(self, images: images)
   }
 
   func cancelButtonDidPress() {
+		self.configuration.cancelButtonHandler?()
     delegate?.cancelButtonDidPress(self)
   }
 
