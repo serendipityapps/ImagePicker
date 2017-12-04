@@ -73,6 +73,7 @@ open class ImagePickerController: UIViewController {
   open var stack = ImageStack()
   open var imageLimit = 0
   open var preferredImageSize: CGSize?
+	open var resizeModeIfPreferredImageSize: PHImageRequestOptionsResizeMode = .fast
   open var startOnFrontCamera = false
 	open var isGalleryDrawerResizable = true
 
@@ -364,7 +365,7 @@ extension ImagePickerController: BottomContainerViewDelegate {
   func doneButtonDidPress() {
     var images: [UIImage]
     if let preferredImageSize = preferredImageSize {
-      images = AssetManager.resolveAssets(stack.assets, size: preferredImageSize)
+      images = AssetManager.resolveAssets(stack.assets, size: preferredImageSize, resizeMode: resizeModeIfPreferredImageSize)
     } else {
       images = AssetManager.resolveAssets(stack.assets)
     }
@@ -381,7 +382,7 @@ extension ImagePickerController: BottomContainerViewDelegate {
   func imageStackViewDidPress() {
     var images: [UIImage]
     if let preferredImageSize = preferredImageSize {
-        images = AssetManager.resolveAssets(stack.assets, size: preferredImageSize)
+			images = AssetManager.resolveAssets(stack.assets, size: preferredImageSize, resizeMode: resizeModeIfPreferredImageSize)
     } else {
         images = AssetManager.resolveAssets(stack.assets)
     }
