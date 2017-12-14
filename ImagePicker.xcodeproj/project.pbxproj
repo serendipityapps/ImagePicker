@@ -12,6 +12,7 @@
 		44DCFA981FC8490A009D9FD3 /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44DCFA971FC8490A009D9FD3 /* OverlayView.swift */; };
 		44DCFA9A1FC84982009D9FD3 /* OverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 44DCFA991FC84982009D9FD3 /* OverlayView.xib */; };
 		44DCFA9E1FC85C62009D9FD3 /* camera-viewport-guide.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 44DCFA9D1FC85C62009D9FD3 /* camera-viewport-guide.pdf */; };
+		A99FBBB91FE327180095D2CD /* ImagePickerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A99FBBB81FE327180095D2CD /* ImagePickerView.xib */; };
 		D20FF6361CD23426000F3BFE /* CameraMan.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20FF6351CD23426000F3BFE /* CameraMan.swift */; };
 		D25A8C2C1D47681E0008D2F7 /* ImageGalleryLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D25A8C2B1D47681E0008D2F7 /* ImageGalleryLayout.swift */; };
 		D25A8C2E1D4768250008D2F7 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D25A8C2D1D4768250008D2F7 /* Helper.swift */; };
@@ -55,6 +56,7 @@
 		44DCFA971FC8490A009D9FD3 /* OverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayView.swift; sourceTree = "<group>"; };
 		44DCFA991FC84982009D9FD3 /* OverlayView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OverlayView.xib; sourceTree = "<group>"; };
 		44DCFA9D1FC85C62009D9FD3 /* camera-viewport-guide.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "camera-viewport-guide.pdf"; sourceTree = "<group>"; };
+		A99FBBB81FE327180095D2CD /* ImagePickerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ImagePickerView.xib; sourceTree = "<group>"; };
 		D20FF6351CD23426000F3BFE /* CameraMan.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraMan.swift; sourceTree = "<group>"; };
 		D25A8C2B1D47681E0008D2F7 /* ImageGalleryLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageGalleryLayout.swift; sourceTree = "<group>"; };
 		D25A8C2D1D4768250008D2F7 /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 			isa = PBXGroup;
 			children = (
 				D5DC59BA1C201CC4003BD79B /* ImagePickerController.swift */,
+				A99FBBB81FE327180095D2CD /* ImagePickerView.xib */,
 				D5DC59B31C201CC4003BD79B /* Configuration.swift */,
 				D25A8C2D1D4768250008D2F7 /* Helper.swift */,
 				39D1340F1CAC4B4E00EA2ECE /* AssetManager.swift */,
@@ -334,6 +337,7 @@
 				DC197E381E945FA500F2A7D1 /* video@3x.png in Resources */,
 				44DCFA9A1FC84982009D9FD3 /* OverlayView.xib in Resources */,
 				D5D370C11C44FD1600690C0A /* cameraIcon@3x.png in Resources */,
+				A99FBBB91FE327180095D2CD /* ImagePickerView.xib in Resources */,
 				D5D370C31C44FD1600690C0A /* OFF@3x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

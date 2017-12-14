@@ -19,31 +19,10 @@ open class ImagePickerController: UIViewController {
     static let velocity: CGFloat = 100
   }
 
-  open lazy var galleryView: ImageGalleryView = { [unowned self] in
-    let galleryView = ImageGalleryView(configuration: self.configuration)
-    galleryView.delegate = self
-    galleryView.selectedStack = self.stack
-    galleryView.collectionView.layer.anchorPoint = CGPoint(x: 0, y: 0)
-    galleryView.imageLimit = self.imageLimit
-
-    return galleryView
-    }()
-
-  open lazy var bottomContainer: BottomContainerView = { [unowned self] in
-    let view = BottomContainerView(configuration: self.configuration)
-    view.backgroundColor = self.configuration.bottomContainerColor
-    view.delegate = self
-
-    return view
-    }()
-
-  open lazy var topView: TopView = { [unowned self] in
-    let view = TopView(configuration: self.configuration)
-    view.backgroundColor = UIColor.clear
-    view.delegate = self
-
-    return view
-    }()
+	@IBOutlet open var galleryView: ImageGalleryView!
+  @IBOutlet open var bottomContainer: BottomContainerView!
+  @IBOutlet open var topView: TopView!
+	@IBOutlet open var cameraBaseView: UIView!
 
   lazy var cameraController: CameraView = { [unowned self] in
     let controller = CameraView(configuration: self.configuration)
@@ -88,7 +67,8 @@ open class ImagePickerController: UIViewController {
 
   public required init(configuration: Configuration = Configuration()) {
     self.configuration = configuration
-    super.init(nibName: nil, bundle: nil)
+		let bundle = Bundle(for: ImagePickerController.self)
+    super.init(nibName: "ImagePickerView", bundle: bundle)
   }
 
   public required init?(coder aDecoder: NSCoder) {
@@ -100,11 +80,28 @@ open class ImagePickerController: UIViewController {
   open override func viewDidLoad() {
     super.viewDidLoad()
 
-    for subview in [cameraController.view, galleryView, bottomContainer, topView] {
-      view.addSubview(subview!)
-      subview?.translatesAutoresizingMaskIntoConstraints = false
-    }
+		galleryView.delegate = self
+		galleryView.selectedStack = self.stack
+		galleryView.collectionView.layer.anchorPoint = CGPoint(x: 0, y: 0)
+		galleryView.imageLimit = self.imageLimit
+		
+		bottomContainer.backgroundColor = self.configuration.bottomContainerColor
+		bottomContainer.delegate = self
 
+		topView.backgroundColor = UIColor.clear
+		topView.delegate = self
+		
+		cameraController.view.frame = cameraBaseView.bounds
+		cameraController.view.translatesAutoresizingMaskIntoConstraints = false
+		cameraBaseView.addSubview(cameraController.view)
+
+		let top = NSLayoutConstraint(item: cameraController.view, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: cameraBaseView, attribute: NSLayoutAttribute.top, multiplier: 1.0, constant: 0)
+		let leading = NSLayoutConstraint(item: cameraController.view, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: cameraBaseView, attribute: NSLayoutAttribute.leading, multiplier: 1.0, constant: 0)
+		let trailing = NSLayoutConstraint(item: cameraController.view, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: cameraBaseView, attribute: NSLayoutAttribute.trailing, multiplier: 1.0, constant: 0)
+		let bottom = NSLayoutConstraint(item: cameraController.view, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: cameraBaseView, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 0)
+		
+		NSLayoutConstraint.activate([trailing, bottom, top, leading])
+		
     view.addSubview(volumeView)
     view.sendSubview(toBack: volumeView)
 
@@ -114,7 +111,6 @@ open class ImagePickerController: UIViewController {
     cameraController.view.addGestureRecognizer(panGestureRecognizer)
 
     subscribe()
-    setupConstraints()
   }
 
   open override func viewWillAppear(_ animated: Bool) {
