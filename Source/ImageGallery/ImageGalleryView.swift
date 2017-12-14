@@ -109,14 +109,11 @@ open class ImageGalleryView: UIView {
   }
 
   func updateFrames() {
-    let totalWidth = UIScreen.main.bounds.width
-    frame.size.width = totalWidth
-    let collectionFrame = frame.height == configuration.galleryBarHeight ? 100 + configuration.galleryBarHeight : frame.height
-    topSeparator.frame = CGRect(x: 0, y: 0, width: totalWidth, height: configuration.galleryBarHeight)
+    topSeparator.frame = CGRect(x: 0, y: 0, width: self.bounds.size.width, height: configuration.galleryBarHeight)
     topSeparator.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin, .flexibleWidth]
-    configuration.indicatorView.frame = CGRect(x: (totalWidth - configuration.indicatorWidth) / 2, y: (topSeparator.frame.height - configuration.indicatorHeight) / 2,
+    configuration.indicatorView.frame = CGRect(x: (self.bounds.size.width - configuration.indicatorWidth) / 2, y: (topSeparator.frame.height - configuration.indicatorHeight) / 2,
       width: configuration.indicatorWidth, height: configuration.indicatorHeight)
-    collectionView.frame = CGRect(x: 0, y: topSeparator.frame.height, width: totalWidth, height: collectionFrame - topSeparator.frame.height)
+    collectionView.frame = CGRect(x: 0, y: topSeparator.frame.height, width: self.bounds.size.width, height: self.bounds.size.height - topSeparator.frame.height)
     collectionSize = CGSize(width: collectionView.frame.height, height: collectionView.frame.height)
     noImagesLabel.center = CGPoint(x: bounds.width / 2, y: (bounds.height + configuration.galleryBarHeight) / 2)
 
