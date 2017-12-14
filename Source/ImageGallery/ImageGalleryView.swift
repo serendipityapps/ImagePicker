@@ -11,13 +11,6 @@ private func < <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
   }
 }
 
-protocol ImageGalleryPanGestureDelegate: class {
-
-  func panGestureDidStart()
-  func panGestureDidChange(_ translation: CGPoint)
-  func panGestureDidEnd(_ translation: CGPoint, velocity: CGPoint)
-}
-
 open class ImageGalleryView: UIView {
 
 	var configuration = Configuration()
@@ -47,17 +40,9 @@ open class ImageGalleryView: UIView {
   lazy var topSeparator: UIView = { [unowned self] in
     let view = UIView()
     view.translatesAutoresizingMaskIntoConstraints = false
-    view.addGestureRecognizer(self.panGestureRecognizer)
     view.backgroundColor = self.configuration.gallerySeparatorColor
 
     return view
-    }()
-
-  lazy var panGestureRecognizer: UIPanGestureRecognizer = { [unowned self] in
-    let gesture = UIPanGestureRecognizer()
-    gesture.addTarget(self, action: #selector(handlePanGestureRecognizer(_:)))
-
-    return gesture
     }()
 
   open lazy var noImagesLabel: UILabel = { [unowned self] in
@@ -75,7 +60,6 @@ open class ImageGalleryView: UIView {
   open lazy var selectedStack = ImageStack()
   public lazy var assets = [PHAsset]()
 
-  weak var delegate: ImageGalleryPanGestureDelegate?
   var collectionSize: CGSize?
   var shouldTransform = false
   var imagesBeforeLoading = 0
@@ -163,25 +147,6 @@ open class ImageGalleryView: UIView {
       self.collectionView.reloadData()
 
       completion?()
-    }
-  }
-
-  // MARK: - Pan gesture recognizer
-
-  @objc func handlePanGestureRecognizer(_ gesture: UIPanGestureRecognizer) {
-    guard let superview = superview else { return }
-
-    let translation = gesture.translation(in: superview)
-    let velocity = gesture.velocity(in: superview)
-
-    switch gesture.state {
-    case .began:
-      delegate?.panGestureDidStart()
-    case .changed:
-      delegate?.panGestureDidChange(translation)
-    case .ended:
-      delegate?.panGestureDidEnd(translation, velocity: velocity)
-    default: break
     }
   }
 
