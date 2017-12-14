@@ -16,7 +16,6 @@ open class ImagePickerController: UIViewController {
   struct GestureConstants {
     static let maximumHeight: CGFloat = 200
     static let minimumHeight: CGFloat = 125
-    static let velocity: CGFloat = 100
   }
 
 	@IBOutlet open var galleryView: ImageGalleryView!
@@ -125,12 +124,12 @@ open class ImagePickerController: UIViewController {
 		
 		self.view.layoutIfNeeded()
 		
-		let galleryHeight: CGFloat = min(GestureConstants.minimumHeight, configuration.galleryHeight)
+		let galleryHeight: CGFloat = min(GestureConstants.maximumHeight, max(GestureConstants.minimumHeight, configuration.galleryHeight))
 		constraintGalleryHeight.constant = galleryHeight
 
 		galleryView.updateFrames()
 		galleryView.collectionViewLayout.invalidateLayout()
-		self.updateGalleryViewFrames(GestureConstants.minimumHeight)
+		self.updateGalleryViewFrames(galleryHeight)
 		self.galleryView.collectionView.transform = CGAffineTransform.identity
 		self.galleryView.collectionView.contentInset = UIEdgeInsets.zero
 		self.view.layoutIfNeeded()		
@@ -265,44 +264,7 @@ open class ImagePickerController: UIViewController {
 	open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
 		return .fade
 	}
-
-  open func collapseGalleryView(_ completion: (() -> Void)?) {
-    galleryView.collectionViewLayout.invalidateLayout()
-    UIView.animate(withDuration: 0.3, animations: {
-      self.updateGalleryViewFrames(self.galleryView.topSeparator.frame.height)
-      self.galleryView.collectionView.transform = CGAffineTransform.identity
-      self.galleryView.collectionView.contentInset = UIEdgeInsets.zero
-			self.view.layoutIfNeeded()
-      }, completion: { _ in
-        completion?()
-    })
-  }
-
-  open func showGalleryView() {
-    galleryView.collectionViewLayout.invalidateLayout()
-    UIView.animate(withDuration: 0.3, animations: {
-      self.updateGalleryViewFrames(GestureConstants.minimumHeight)
-      self.galleryView.collectionView.transform = CGAffineTransform.identity
-      self.galleryView.collectionView.contentInset = UIEdgeInsets.zero
-			self.view.layoutIfNeeded()
-    })
-
-  }
-
-  open func expandGalleryView() {
-    galleryView.collectionViewLayout.invalidateLayout()
-
-    UIView.animate(withDuration: 0.3, animations: {
-      self.updateGalleryViewFrames(GestureConstants.maximumHeight)
-
-			let scale = (GestureConstants.maximumHeight - self.configuration.galleryBarHeight) / (GestureConstants.minimumHeight - self.configuration.galleryBarHeight)
-      self.galleryView.collectionView.transform = CGAffineTransform(scaleX: scale, y: scale)
-
-      let value = self.view.frame.width * (scale - 1) / scale
-      self.galleryView.collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: value)
-    })
-  }
-
+	
   func updateGalleryViewFrames(_ constant: CGFloat) {
     constraintTopGalleryToTopOfBottomContainer.constant = bottomContainer.frame.height
     constraintGalleryHeight.constant = constant
@@ -332,11 +294,7 @@ open class ImagePickerController: UIViewController {
       self.cameraController.takePicture { self.isTakingPicture = false }
     }
 
-    if configuration.collapseCollectionViewWhileShot {
-      collapseGalleryView(action)
-    } else {
-      action()
-    }
+		action()
   }
 }
 
