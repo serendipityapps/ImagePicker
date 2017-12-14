@@ -266,7 +266,7 @@ open class ImagePickerController: UIViewController {
 	}
 	
   func updateGalleryViewFrames(_ constant: CGFloat) {
-    constraintTopGalleryToTopOfBottomContainer.constant = bottomContainer.frame.height
+    constraintTopGalleryToTopOfBottomContainer.constant = constant
     constraintGalleryHeight.constant = constant
 
 		cameraController.overlayTopConstraint?.constant = topView.frame.maxY
