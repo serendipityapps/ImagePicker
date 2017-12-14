@@ -14,6 +14,7 @@
             <connections>
                 <outlet property="bottomContainer" destination="YnB-f9-DOP" id="4yZ-Fh-hUN"/>
                 <outlet property="cameraBaseView" destination="Ohx-U3-lZn" id="EI0-ok-Hhl"/>
+                <outlet property="constraintGalleryHeight" destination="tTu-Lf-4Su" id="yjT-vE-hVL"/>
                 <outlet property="constraintTopGalleryToTopOfBottomContainer" destination="Dyv-iP-E3N" id="Lsj-H3-bgD"/>
                 <outlet property="galleryView" destination="Ixw-AZ-t17" id="QWo-xH-nuL"/>
                 <outlet property="topView" destination="1nq-Z3-gki" id="Zly-1z-lxy"/>
