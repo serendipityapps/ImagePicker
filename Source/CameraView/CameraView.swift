@@ -11,7 +11,7 @@ protocol CameraViewDelegate: class {
 
 class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate {
 
-	let configuration: Configuration
+	var configuration = Configuration()
 
   lazy var blurView: UIVisualEffectView = { [unowned self] in
     let effect = UIBlurEffect(style: .dark)
@@ -133,7 +133,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
   }
 
   required init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+		super.init(coder: aDecoder)
   }
 
   override func viewDidLoad() {

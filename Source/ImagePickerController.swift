@@ -80,17 +80,24 @@ open class ImagePickerController: UIViewController {
   open override func viewDidLoad() {
     super.viewDidLoad()
 
+		galleryView.configuration = self.configuration
+		galleryView.configure()
 		galleryView.delegate = self
 		galleryView.selectedStack = self.stack
 		galleryView.collectionView.layer.anchorPoint = CGPoint(x: 0, y: 0)
 		galleryView.imageLimit = self.imageLimit
-		
+
+		bottomContainer.configuration = self.configuration
+		bottomContainer.configure()
 		bottomContainer.backgroundColor = self.configuration.bottomContainerColor
 		bottomContainer.delegate = self
 
+		topView.configuration = self.configuration
+		topView.configure()
 		topView.backgroundColor = UIColor.clear
 		topView.delegate = self
 		
+		cameraController.configuration = self.configuration
 		cameraController.view.frame = cameraBaseView.bounds
 		cameraController.view.translatesAutoresizingMaskIntoConstraints = false
 		cameraBaseView.addSubview(cameraController.view)
