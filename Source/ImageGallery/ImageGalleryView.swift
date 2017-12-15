@@ -62,7 +62,6 @@ open class ImageGalleryView: UIView {
 
   var collectionSize: CGSize?
   var shouldTransform = false
-  var imagesBeforeLoading = 0
   var fetchResult: PHFetchResult<AnyObject>?
   public var imageLimit = 0
 
@@ -96,9 +95,6 @@ open class ImageGalleryView: UIView {
     [collectionView, topSeparator].forEach { addSubview($0) }
 
     topSeparator.addSubview(configuration.indicatorView)
-
-    imagesBeforeLoading = 0
-    fetchPhotos()
   }
 
   // MARK: - Layout
@@ -140,15 +136,14 @@ open class ImageGalleryView: UIView {
     AssetManager.fetch(withConfiguration: configuration) { assets in
       self.assets.removeAll()
       self.assets.append(contentsOf: assets)
-			self.displayNoImagesMessage(assets.isEmpty)
       self.collectionView.reloadData()
 
       completion?()
     }
   }
 
-  func displayNoImagesMessage(_ hideCollectionView: Bool) {
-    collectionView.alpha = hideCollectionView ? 0 : 1
+  func displayNoImagesMessage() {
+    collectionView.alpha = 0
     updateNoImagesLabel()
   }
 }

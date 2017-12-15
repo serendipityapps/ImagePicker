@@ -58,6 +58,10 @@ open class ImagePickerController: UIViewController {
 
 	public func deactivate() {
 			self.cameraController.stopCamera()
+			self.resetAssets()
+			self.galleryView.assets = []
+			self.galleryView.collectionView.reloadData()
+			self.galleryView.collectionView.alpha = 0
 	}
 
   var totalSize: CGSize { return UIScreen.main.bounds.size }
@@ -129,9 +133,7 @@ open class ImagePickerController: UIViewController {
 		self.setNeedsStatusBarAppearanceUpdate()
 		
 		applyOrientationTransforms()
-		
-		self.galleryView.displayNoImagesMessage(false)
-		
+
 		self.view.layoutIfNeeded()
 		
 		let galleryHeight: CGFloat = min(GestureConstants.maximumHeight, max(GestureConstants.minimumHeight, configuration.galleryHeight))
@@ -175,7 +177,7 @@ open class ImagePickerController: UIViewController {
     PHPhotoLibrary.requestAuthorization { (authorizationStatus) -> Void in
       DispatchQueue.main.async {
         if authorizationStatus == .denied {
-					self.galleryView.displayNoImagesMessage(true)
+					self.galleryView.displayNoImagesMessage()
           self.presentAskPermissionAlert()
         } else if authorizationStatus == .authorized {
           self.permissionGrantedForGallery()
@@ -208,7 +210,13 @@ open class ImagePickerController: UIViewController {
   }
 
   func permissionGrantedForGallery() {
-    galleryView.fetchPhotos()
+		galleryView.fetchPhotos({
+			UIView.animate(withDuration: 0.25, delay: 0.3, options: UIViewAnimationOptions(), animations: {
+				self.galleryView.collectionView.alpha = 1
+			}, completion: { (_) in
+
+			})
+		})
     enableGestures(true)
   }
 
