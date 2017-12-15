@@ -9,7 +9,7 @@ protocol CameraViewDelegate: class {
   func cameraNotAvailable()
 }
 
-class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate {
+open class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate {
 
 	var configuration = Configuration()
 
@@ -132,11 +132,11 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     super.init(nibName: nil, bundle: nil)
   }
 
-  required init?(coder aDecoder: NSCoder) {
+	required public init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
   }
 
-  override func viewDidLoad() {
+	override open func viewDidLoad() {
     super.viewDidLoad()
 
     if configuration.recordLocation {
@@ -176,14 +176,14 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
     cameraMan.setup(self.startOnFrontCamera)
   }
 
-  override func viewDidAppear(_ animated: Bool) {
+	override open func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
 
     previewLayer?.connection?.videoOrientation = .portrait
     locationManager?.startUpdatingLocation()
   }
 
-  override func viewDidDisappear(_ animated: Bool) {
+	override open func viewDidDisappear(_ animated: Bool) {
     super.viewDidDisappear(animated)
     locationManager?.stopUpdatingLocation()
   }
@@ -204,7 +204,7 @@ class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate
 
   // MARK: - Layout
 
-  override func viewDidLayoutSubviews() {
+	override open func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
 
     let centerX = view.bounds.width / 2
