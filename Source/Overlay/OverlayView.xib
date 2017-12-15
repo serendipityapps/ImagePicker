@@ -49,12 +49,12 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstAttribute="height" secondItem="1hf-6X-e1r" secondAttribute="height" multiplier="0.9" priority="750" id="11U-MM-gym"/>
+                <constraint firstAttribute="height" secondItem="1hf-6X-e1r" secondAttribute="height" multiplier="0.95" priority="750" id="11U-MM-gym"/>
                 <constraint firstItem="1hf-6X-e1r" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="16s-Dk-4Zx"/>
                 <constraint firstItem="1hf-6X-e1r" firstAttribute="width" relation="lessThanOrEqual" secondItem="iN0-l3-epB" secondAttribute="width" multiplier="0.9" id="413-nf-2Db"/>
                 <constraint firstAttribute="width" secondItem="1hf-6X-e1r" secondAttribute="width" multiplier="0.9" priority="750" id="6Z5-6Y-m8E"/>
                 <constraint firstItem="1hf-6X-e1r" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="CEB-kF-Gdt"/>
-                <constraint firstItem="1hf-6X-e1r" firstAttribute="height" relation="lessThanOrEqual" secondItem="iN0-l3-epB" secondAttribute="height" multiplier="0.9" id="dOY-oM-Xyk"/>
+                <constraint firstItem="1hf-6X-e1r" firstAttribute="height" relation="lessThanOrEqual" secondItem="iN0-l3-epB" secondAttribute="height" multiplier="0.95" id="dOY-oM-Xyk"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>

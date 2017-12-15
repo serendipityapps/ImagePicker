@@ -9,8 +9,8 @@ protocol TopViewDelegate: class {
 open class TopView: UIView {
 
   struct Dimensions {
-    static let leftOffset: CGFloat = 11
-    static let rightOffset: CGFloat = 17
+    static let leftOffset: CGFloat = 8
+    static let rightOffset: CGFloat = 8
     static let height: CGFloat = 34
   }
 
