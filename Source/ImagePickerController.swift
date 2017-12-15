@@ -268,13 +268,12 @@ open class ImagePickerController: UIViewController {
   func updateGalleryViewFrames() {
 		
 		let galleryHeight: CGFloat = min(GestureConstants.maximumHeight, max(GestureConstants.minimumHeight, configuration.galleryHeight))
-		constraintGalleryHeight.constant = galleryHeight
 		
     constraintTopGalleryToTopOfBottomContainer.constant = galleryHeight
     constraintGalleryHeight.constant = galleryHeight
 
 		cameraController.overlayTopConstraint?.constant = topView.frame.maxY
-		cameraController.overlayBottomConstraint?.constant = galleryHeight
+		cameraController.overlayBottomConstraint?.constant = -galleryHeight
   }
 
   func enableGestures(_ enabled: Bool) {
