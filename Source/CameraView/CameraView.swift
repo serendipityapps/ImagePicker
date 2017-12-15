@@ -157,7 +157,7 @@ open class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDel
 			overlayView.translatesAutoresizingMaskIntoConstraints = false
 			view.addSubview(overlayView)
 
-			self.overlayTopConstraint = NSLayoutConstraint(item: view, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: overlayView, attribute: NSLayoutAttribute.top, multiplier: 1.0, constant: 0)
+			self.overlayTopConstraint = NSLayoutConstraint(item: overlayView, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.top, multiplier: 1.0, constant: 0)
 			let leading = NSLayoutConstraint(item: overlayView, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.leading, multiplier: 1.0, constant: 0)
 
 			let trailing = NSLayoutConstraint(item: overlayView, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: view, attribute: NSLayoutAttribute.trailing, multiplier: 1.0, constant: 0)
@@ -217,7 +217,6 @@ open class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDel
 
     blurView.frame = view.bounds
     containerView.frame = view.bounds
-		overlayView.frame = view.bounds
     capturedImageView.frame = view.bounds
   }
 

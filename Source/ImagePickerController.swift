@@ -129,7 +129,7 @@ open class ImagePickerController: UIViewController {
 
 		galleryView.updateFrames()
 		galleryView.collectionViewLayout.invalidateLayout()
-		self.updateGalleryViewFrames(galleryHeight)
+		self.updateGalleryViewFrames()
 		self.galleryView.collectionView.transform = CGAffineTransform.identity
 		self.galleryView.collectionView.contentInset = UIEdgeInsets.zero
 		self.view.layoutIfNeeded()		
@@ -265,13 +265,16 @@ open class ImagePickerController: UIViewController {
 		return .fade
 	}
 	
-  func updateGalleryViewFrames(_ constant: CGFloat) {
-    constraintTopGalleryToTopOfBottomContainer.constant = constant
-    constraintGalleryHeight.constant = constant
-		cameraController.overlayBottomConstraint?.constant = constant
+  func updateGalleryViewFrames() {
+		
+		let galleryHeight: CGFloat = min(GestureConstants.maximumHeight, max(GestureConstants.minimumHeight, configuration.galleryHeight))
+		constraintGalleryHeight.constant = galleryHeight
+		
+    constraintTopGalleryToTopOfBottomContainer.constant = galleryHeight
+    constraintGalleryHeight.constant = galleryHeight
 
 		cameraController.overlayTopConstraint?.constant = topView.frame.maxY
-		cameraController.overlayBottomConstraint?.constant = -constant
+		cameraController.overlayBottomConstraint?.constant = galleryHeight
   }
 
   func enableGestures(_ enabled: Bool) {
@@ -384,6 +387,7 @@ extension ImagePickerController: CameraViewDelegate {
   func applyOrientationTransforms() {
     UIView.animate(withDuration: 0.25, animations: {
       self.galleryView.collectionViewLayout.invalidateLayout()
+			self.updateGalleryViewFrames()
     })
   }
 }
