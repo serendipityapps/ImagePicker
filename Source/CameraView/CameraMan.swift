@@ -5,6 +5,7 @@ import PhotosUI
 protocol CameraManDelegate: class {
   func cameraManNotAvailable(_ cameraMan: CameraMan)
   func cameraManDidStart(_ cameraMan: CameraMan)
+	func cameraManDidStop(_ cameraMan: CameraMan)
   func cameraMan(_ cameraMan: CameraMan, didChangeInput input: AVCaptureDeviceInput)
 }
 
@@ -27,7 +28,6 @@ class CameraMan {
 
   func setup(_ startOnFrontCamera: Bool = false) {
     self.startOnFrontCamera = startOnFrontCamera
-    checkPermission()
   }
 
   func setupDevices() {
@@ -120,6 +120,7 @@ class CameraMan {
 
   func stop() {
     self.session.stopRunning()
+		self.delegate?.cameraManDidStop(self)
   }
 
   func switchCamera(_ completion: (() -> Void)? = nil) {

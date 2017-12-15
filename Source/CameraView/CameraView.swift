@@ -9,9 +9,17 @@ protocol CameraViewDelegate: class {
   func cameraNotAvailable()
 }
 
-open class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate {
+public class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDelegate {
 
 	var configuration = Configuration()
+
+	public func startCamera() {
+		cameraMan.checkPermission()
+	}
+
+	public func stopCamera() {
+		cameraMan.stop()
+	}
 
   lazy var blurView: UIVisualEffectView = { [unowned self] in
     let effect = UIBlurEffect(style: .dark)
@@ -111,11 +119,6 @@ open class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDel
   var animationTimer: Timer?
   var locationManager: LocationManager?
   var startOnFrontCamera: Bool = false
-	var cameraManCovered: CGRect = CGRect.zero {
-		didSet {
-
-		}
-	}
 
   private let minimumZoomFactor: CGFloat = 1.0
   private let maximumZoomFactor: CGFloat = 3.0
@@ -136,12 +139,8 @@ open class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDel
 		super.init(coder: aDecoder)
   }
 
-	override open func viewDidLoad() {
+	override public func viewDidLoad() {
     super.viewDidLoad()
-
-    if configuration.recordLocation {
-      locationManager = LocationManager()
-    }
 
     view.backgroundColor = configuration.mainColor
 
@@ -176,16 +175,14 @@ open class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDel
     cameraMan.setup(self.startOnFrontCamera)
   }
 
-	override open func viewDidAppear(_ animated: Bool) {
+	override public func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
 
     previewLayer?.connection?.videoOrientation = .portrait
-    locationManager?.startUpdatingLocation()
   }
 
-	override open func viewDidDisappear(_ animated: Bool) {
+	override public func viewDidDisappear(_ animated: Bool) {
     super.viewDidDisappear(animated)
-    locationManager?.stopUpdatingLocation()
   }
 
   func setupPreviewLayer() {
@@ -204,7 +201,7 @@ open class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDel
 
   // MARK: - Layout
 
-	override open func viewDidLayoutSubviews() {
+	override public func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
 
     let centerX = view.bounds.width / 2
@@ -359,6 +356,18 @@ open class CameraView: UIViewController, CLLocationManagerDelegate, CameraManDel
   }
 
   func cameraManDidStart(_ cameraMan: CameraMan) {
+		if configuration.recordLocation {
+			locationManager = LocationManager()
+		}
+		locationManager?.startUpdatingLocation()
     setupPreviewLayer()
+		previewLayer?.connection?.videoOrientation = .portrait
   }
+
+	func cameraManDidStop(_ cameraMan: CameraMan) {
+		locationManager?.stopUpdatingLocation()
+		self.locationManager = nil
+		previewLayer?.removeFromSuperlayer()
+		self.previewLayer = nil
+	}
 }

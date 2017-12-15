@@ -49,6 +49,16 @@ open class ImagePickerController: UIViewController {
   open var preferredImageSize: CGSize?
 	open var resizeModeIfPreferredImageSize: PHImageRequestOptionsResizeMode = .fast
   open var startOnFrontCamera = false
+	open var loadWithoutAccessingCameraOrPhotos = true
+
+	public func activate() {
+			self.cameraController.startCamera()
+			self.checkPhotoAccessStatus()
+	}
+
+	public func deactivate() {
+			self.cameraController.stopCamera()
+	}
 
   var totalSize: CGSize { return UIScreen.main.bounds.size }
   var numberOfCells: Int?
@@ -138,7 +148,9 @@ open class ImagePickerController: UIViewController {
   open override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
 
-		checkStatus()
+		if loadWithoutAccessingCameraOrPhotos == false {
+			activate()
+		}
 
     applyOrientationTransforms()
   }
@@ -151,7 +163,7 @@ open class ImagePickerController: UIViewController {
     self.stack.resetAssets([])
   }
 
-  func checkStatus() {
+  func checkPhotoAccessStatus() {
     let currentStatus = PHPhotoLibrary.authorizationStatus()
     guard currentStatus != .authorized else { return }
 
@@ -163,7 +175,7 @@ open class ImagePickerController: UIViewController {
 					self.galleryView.displayNoImagesMessage(true)
           self.presentAskPermissionAlert()
         } else if authorizationStatus == .authorized {
-          self.permissionGranted()
+          self.permissionGrantedForGallery()
         }
       }
     }
@@ -192,7 +204,7 @@ open class ImagePickerController: UIViewController {
     enableGestures(false)
   }
 
-  func permissionGranted() {
+  func permissionGrantedForGallery() {
     galleryView.fetchPhotos()
     enableGestures(true)
   }
