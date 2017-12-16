@@ -50,6 +50,7 @@ open class ImagePickerController: UIViewController {
 	open var resizeModeIfPreferredImageSize: PHImageRequestOptionsResizeMode = .fast
   open var startOnFrontCamera = false
 	open var loadWithoutAccessingCameraOrPhotos = true
+	open var isStatusBarHidden = false
 
 	public func activate() {
 			self.cameraController.startCamera()
@@ -129,8 +130,6 @@ open class ImagePickerController: UIViewController {
     if configuration.managesAudioSession {
       _ = try? AVAudioSession.sharedInstance().setActive(true)
     }
-
-		self.setNeedsStatusBarAppearanceUpdate()
 		
 		applyOrientationTransforms()
 
@@ -155,10 +154,17 @@ open class ImagePickerController: UIViewController {
 		}
 
     applyOrientationTransforms()
+		
+		self.isStatusBarHidden = true
+		UIView.animate(withDuration: 0.05) {
+			self.setNeedsStatusBarAppearanceUpdate()
+		}
   }
 
   open override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
+		
+		self.isStatusBarHidden = false
   }
 
   open func resetAssets() {
@@ -281,7 +287,7 @@ open class ImagePickerController: UIViewController {
   // MARK: - Helpers
 
   open override var prefersStatusBarHidden: Bool {
-    return true
+    return isStatusBarHidden
   }
 	
 	open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
