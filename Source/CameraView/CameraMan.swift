@@ -120,6 +120,9 @@ class CameraMan {
 
   func stop() {
     self.session.stopRunning()
+		self.frontCamera = nil
+		self.backCamera = nil
+		self.stillImageOutput = nil
 		self.delegate?.cameraManDidStop(self)
   }
 
