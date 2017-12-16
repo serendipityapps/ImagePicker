@@ -123,6 +123,9 @@ class CameraMan {
 		self.frontCamera = nil
 		self.backCamera = nil
 		self.stillImageOutput = nil
+		for input in session.inputs {
+			session.removeInput(input)
+		}
 		self.delegate?.cameraManDidStop(self)
   }
 
