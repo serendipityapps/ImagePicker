@@ -223,11 +223,12 @@ class CameraMan {
   }
 
   func focus(_ point: CGPoint) {
-    guard let device = currentInput?.device, device.isFocusModeSupported(AVCaptureDevice.FocusMode.locked) else { return }
+    guard let device = currentInput?.device, device.isFocusModeSupported(AVCaptureDevice.FocusMode.locked), device.isFocusPointOfInterestSupported else { return }
 
     queue.async {
       self.lock {
         device.focusPointOfInterest = point
+				device.focusMode = .autoFocus
       }
     }
   }
