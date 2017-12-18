@@ -151,7 +151,10 @@ class CameraMan {
   }
 
 	func takePhoto(_ previewLayer: AVCaptureVideoPreviewLayer, location: CLLocation?, cropRect: CGRect?, completion: (() -> Void)? = nil) {
-    guard let connection = stillImageOutput?.connection(with: AVMediaType.video) else { return }
+    guard let connection = stillImageOutput?.connection(with: AVMediaType.video) else {
+			completion?()
+			return
+		}
 
     connection.videoOrientation = Helper.videoOrientation()
 

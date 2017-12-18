@@ -251,7 +251,10 @@ public class CameraView: UIViewController, CLLocationManagerDelegate, CameraManD
   }
 
   func takePicture(_ completion: @escaping () -> Void) {
-    guard let previewLayer = previewLayer else { return }
+    guard let previewLayer = previewLayer else {
+			completion()
+			return
+		}
 
     UIView.animate(withDuration: 0.1, animations: {
       self.capturedImageView.alpha = 1
