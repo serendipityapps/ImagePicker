@@ -120,6 +120,12 @@ class CameraMan {
 
   func stop() {
     self.session.stopRunning()
+		self.frontCamera = nil
+		self.backCamera = nil
+		self.stillImageOutput = nil
+		for input in session.inputs {
+			session.removeInput(input)
+		}
 		self.delegate?.cameraManDidStop(self)
   }
 
@@ -220,11 +226,12 @@ class CameraMan {
   }
 
   func focus(_ point: CGPoint) {
-    guard let device = currentInput?.device, device.isFocusModeSupported(AVCaptureDevice.FocusMode.locked) else { return }
+    guard let device = currentInput?.device, device.isFocusModeSupported(AVCaptureDevice.FocusMode.locked), device.isFocusPointOfInterestSupported else { return }
 
     queue.async {
       self.lock {
         device.focusPointOfInterest = point
+				device.focusMode = .autoFocus
       }
     }
   }
@@ -268,7 +275,7 @@ class CameraMan {
 
   func preferredPresets() -> [String] {
     return [
-      AVCaptureSession.Preset.high.rawValue,
+      AVCaptureSession.Preset.photo.rawValue,
       AVCaptureSession.Preset.high.rawValue,
       AVCaptureSession.Preset.low.rawValue
     ]

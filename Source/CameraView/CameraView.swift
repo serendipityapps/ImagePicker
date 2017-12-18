@@ -287,10 +287,10 @@ public class CameraView: UIViewController, CLLocationManagerDelegate, CameraManD
   // MARK: - Camera methods
 
   func focusTo(_ point: CGPoint) {
-    let convertedPoint = CGPoint(x: point.x / UIScreen.main.bounds.width,
-                                 y: point.y / UIScreen.main.bounds.height)
-
-    cameraMan.focus(convertedPoint)
+		
+		guard let previewLayer = previewLayer else { return }
+		let pointInCamera = previewLayer.captureDevicePointConverted(fromLayerPoint: point)
+		cameraMan.focus(pointInCamera)
 
     focusImageView.center = point
     UIView.animate(withDuration: 0.5, animations: {
