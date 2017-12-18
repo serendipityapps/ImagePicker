@@ -140,7 +140,7 @@ open class ImageGalleryView: UIView, PHPhotoLibraryChangeObserver {
 		self.fetchResult = nil
 		self.collectionView.reloadData()
 		self.collectionView.alpha = 0
-		updateNoImagesLabel()
+		self.noImagesLabel.alpha = 0
 	}
 
 	func fetchPhotos(_ completion: (() -> Void)? = nil) {
