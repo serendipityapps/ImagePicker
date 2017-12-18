@@ -3,7 +3,7 @@ import UIKit
 extension ImageGalleryView: UICollectionViewDataSource {
 
   public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return assets.count
+		return fetchResult?.count ?? 0
   }
 
   public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

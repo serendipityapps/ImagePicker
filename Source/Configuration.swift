@@ -105,8 +105,10 @@ open class Configuration {
 		guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: collectionCellReuseIdentifier,
 																												for: indexPath) as? ImageGalleryViewCell else { return UICollectionViewCell() }
 		
-		let asset = imageGalleryView.assets[(indexPath as NSIndexPath).row]
-		
+		guard let asset = imageGalleryView.fetchResult?.object(at: (indexPath as NSIndexPath).row) else {
+			return cell
+		}
+
 		AssetManager.resolveAsset(asset, size: CGSize(width: 160, height: 240)) { image in
 			if let image = image {
 				cell.configureCell(image)
@@ -155,7 +157,9 @@ open class Configuration {
 			}
 		}
 		
-		let asset = imageGalleryView.assets[(indexPath as NSIndexPath).row]
+		guard let asset = imageGalleryView.fetchResult?.object(at: (indexPath as NSIndexPath).row) else {
+			return
+		}
 		
 		AssetManager.resolveAsset(asset, size: CGSize(width: 100, height: 100)) { image in
 			guard image != nil else { return }

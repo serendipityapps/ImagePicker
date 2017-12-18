@@ -11,9 +11,15 @@ private func < <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
   }
 }
 
-open class ImageGalleryView: UIView {
+protocol ImageGalleryUpdatedDelegate: class {
+	func imageGalleryDidUpdate(_ changes: PHFetchResultChangeDetails<PHAsset>?)
+}
+
+open class ImageGalleryView: UIView, PHPhotoLibraryChangeObserver {
 
 	var configuration = Configuration()
+
+	weak var imageGalleryUpdateDelegate: ImageGalleryUpdatedDelegate?
 
   lazy open var collectionView: UICollectionView = {
     let collectionView = UICollectionView(frame: CGRect.zero,
@@ -58,7 +64,7 @@ open class ImageGalleryView: UIView {
 
   var collectionSize: CGSize?
   var shouldTransform = false
-  var fetchResult: PHFetchResult<AnyObject>?
+	public var fetchResult: PHFetchResult<PHAsset>?
   public var imageLimit = 0
 
   // MARK: - Initializers
@@ -112,36 +118,114 @@ open class ImageGalleryView: UIView {
     collectionView.reloadData()
   }
 
-  func updateNoImagesLabel() {
-    let height = bounds.height
-    let threshold = configuration.galleryBarHeight * 2
+	func updateNoImagesLabel() {
+		let height = bounds.height
+		let threshold = configuration.galleryBarHeight * 2
 
-    UIView.animate(withDuration: 0.25, animations: {
-      if threshold > height || self.collectionView.alpha != 0 {
-        self.noImagesLabel.alpha = 0
-      } else {
+		UIView.animate(withDuration: 0.25, animations: {
+			if threshold > height || self.collectionView.alpha != 0 {
+				self.noImagesLabel.alpha = 0
+			} else {
+				self.noImagesLabel.alpha = 1
 				self.noImagesLabel.center = CGPoint(x: self.bounds.width / 2, y: (height + self.configuration.galleryBarHeight) / 2)
 				self.noImagesLabel.alpha = (height > threshold) ? 1 : (height - self.configuration.galleryBarHeight) / threshold
-      }
-    })
-  }
+			}
+		})
+	}
 
-  // MARK: - Photos handler
+	// MARK: - Photos handler
 
-  func fetchPhotos(_ completion: (() -> Void)? = nil) {
-    AssetManager.fetch(withConfiguration: configuration) { assets in
-      self.assets.removeAll()
-      self.assets.append(contentsOf: assets)
-      self.collectionView.reloadData()
+	func stopBeingInterestedInPhotos() {
+		PHPhotoLibrary.shared().unregisterChangeObserver(self)
+		self.fetchResult = nil
+		self.collectionView.reloadData()
+		self.collectionView.alpha = 0
+		updateNoImagesLabel()
+	}
 
-      completion?()
-    }
-  }
+	func fetchPhotos(_ completion: (() -> Void)? = nil) {
 
-  func displayNoImagesMessage() {
-    collectionView.alpha = 0
-    updateNoImagesLabel()
-  }
+		AssetManager.fetch(withConfiguration: configuration) { [weak self] (fetchResult) in
+
+			guard let strongSelf = self, let fetchResult = fetchResult else { return }
+
+			strongSelf.fetchResult = fetchResult
+
+			strongSelf.collectionView.reloadData()
+
+			if fetchResult.count == 0 {
+				strongSelf.updateNoImagesLabel()
+			} else {
+				UIView.animate(withDuration: 0.25, delay: 0.0, options: UIViewAnimationOptions(), animations: {
+					strongSelf.collectionView.alpha = 1
+					strongSelf.updateNoImagesLabel()
+				}, completion: { (_) in
+
+				})
+			}
+
+			PHPhotoLibrary.shared().register(strongSelf)
+
+			completion?()
+		}
+	}
+
+	func checkIfNoImagesLabelShouldBeDisplayed() {
+
+		guard let fetchResult = fetchResult else {
+			collectionView.alpha = 0
+			updateNoImagesLabel()
+			return
+		}
+
+		if fetchResult.count > 0 {
+			collectionView.alpha = 1
+		} else {
+			collectionView.alpha = 0
+		}
+		updateNoImagesLabel()
+	}
+
+	public func photoLibraryDidChange(_ changeInstance: PHChange) {
+
+		guard let fetchResult = fetchResult else {
+			return
+		}
+
+		DispatchQueue.main.sync {
+			// Check for changes to the list of assets (insertions, deletions, moves, or updates).
+			if let changes = changeInstance.changeDetails(for: fetchResult) {
+				// Keep the new fetch result for future use.
+				self.fetchResult = changes.fetchResultAfterChanges
+				if changes.hasIncrementalChanges {
+					// If there are incremental diffs, animate them in the collection view.
+					collectionView.performBatchUpdates({
+						// For indexes to make sense, updates must be in this order:
+						// delete, insert, reload, move
+						if let removed = changes.removedIndexes, removed.count > 0 {
+							collectionView.deleteItems(at: removed.map { IndexPath(item: $0, section:0) })
+						}
+						if let inserted = changes.insertedIndexes, inserted.count > 0 {
+							collectionView.insertItems(at: inserted.map { IndexPath(item: $0, section:0) })
+						}
+						if let changed = changes.changedIndexes, changed.count > 0 {
+							collectionView.reloadItems(at: changed.map { IndexPath(item: $0, section:0) })
+						}
+						changes.enumerateMoves { fromIndex, toIndex in
+							self.collectionView.moveItem(at: IndexPath(item: fromIndex, section: 0),
+																					 to: IndexPath(item: toIndex, section: 0))
+						}
+					})
+				} else {
+					// Reload the collection view if incremental diffs are not available.
+					collectionView.reloadData()
+				}
+
+				imageGalleryUpdateDelegate?.imageGalleryDidUpdate(changes)
+				checkIfNoImagesLabelShouldBeDisplayed()
+			}
+		}
+	}
 }
 
 // MARK: CollectionViewFlowLayout delegate methods

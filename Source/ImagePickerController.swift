@@ -58,10 +58,11 @@ open class ImagePickerController: UIViewController {
 	public func deactivate() {
 			self.cameraController.stopCamera()
 			self.resetAssets()
-			self.galleryView.assets = []
-			self.galleryView.collectionView.reloadData()
+			self.galleryView.stopBeingInterestedInPhotos()
 			self.galleryView.collectionView.alpha = 0
 			self.isTakingPicture = false
+			topView.alpha = 0
+			cameraController.overlayView.alpha = 0
 	}
 
   var totalSize: CGSize { return UIScreen.main.bounds.size }
@@ -91,6 +92,7 @@ open class ImagePickerController: UIViewController {
 		galleryView.selectedStack = self.stack
 		galleryView.collectionView.layer.anchorPoint = CGPoint(x: 0, y: 0)
 		galleryView.imageLimit = self.imageLimit
+		galleryView.imageGalleryUpdateDelegate = self
 
 		bottomContainer.configuration = self.configuration
 		bottomContainer.configure()
@@ -101,11 +103,15 @@ open class ImagePickerController: UIViewController {
 		topView.configure()
 		topView.backgroundColor = UIColor.clear
 		topView.delegate = self
-		
+		topView.alpha = 0
+
 		cameraController.configuration = self.configuration
+		self.addChildViewController(cameraController)
 		cameraController.view.frame = cameraBaseView.bounds
 		cameraController.view.translatesAutoresizingMaskIntoConstraints = false
 		cameraBaseView.addSubview(cameraController.view)
+
+		cameraController.overlayView.alpha = 0
 
 		let top = NSLayoutConstraint(item: cameraController.view, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: cameraBaseView, attribute: NSLayoutAttribute.top, multiplier: 1.0, constant: 0)
 		let leading = NSLayoutConstraint(item: cameraController.view, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: cameraBaseView, attribute: NSLayoutAttribute.leading, multiplier: 1.0, constant: 0)
@@ -113,7 +119,10 @@ open class ImagePickerController: UIViewController {
 		let bottom = NSLayoutConstraint(item: cameraController.view, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: cameraBaseView, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 0)
 		
 		NSLayoutConstraint.activate([trailing, bottom, top, leading])
-		
+
+		cameraController.didMove(toParentViewController: self)
+
+
     view.addSubview(volumeView)
     view.sendSubview(toBack: volumeView)
 
@@ -148,22 +157,36 @@ open class ImagePickerController: UIViewController {
   open override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
 
+		applyOrientationTransforms()
+
 		if loadWithoutAccessingCameraOrPhotos == false {
 			activate()
 		}
 
-    applyOrientationTransforms()
-		
 		self.isStatusBarHidden = true
-		UIView.animate(withDuration: 0.05) {
+		UIView.animate(withDuration: 0.1, delay: 0, options: UIViewAnimationOptions(), animations: {
 			self.setNeedsStatusBarAppearanceUpdate()
-		}
+		}, completion: { (_) in
+
+		})
+
+		UIView.animate(withDuration: 0.25, delay: 0.3, options: UIViewAnimationOptions(), animations: {
+			self.topView.alpha = 1
+			self.cameraController.overlayView.alpha = 1
+		}, completion: { (_) in
+
+		})
   }
 
   open override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
 		
 		self.isStatusBarHidden = false
+
+		UIView.animate(withDuration: 0.25, animations: {
+			self.topView.alpha = 0
+			self.cameraController.overlayView.alpha = 0
+		})
   }
 
   open func resetAssets() {
@@ -182,8 +205,9 @@ open class ImagePickerController: UIViewController {
     PHPhotoLibrary.requestAuthorization { (authorizationStatus) -> Void in
       DispatchQueue.main.async {
         if authorizationStatus == .denied {
-					self.galleryView.displayNoImagesMessage()
-          self.presentAskPermissionAlert()
+					self.galleryView.collectionView.alpha = 0
+					self.galleryView.updateNoImagesLabel()
+					self.presentAskPermissionAlert()
         } else if authorizationStatus == .authorized {
           self.permissionGrantedForGallery()
         }
@@ -216,11 +240,7 @@ open class ImagePickerController: UIViewController {
 
   func permissionGrantedForGallery() {
 		galleryView.fetchPhotos({
-			UIView.animate(withDuration: 0.25, delay: 0.3, options: UIViewAnimationOptions(), animations: {
-				self.galleryView.collectionView.alpha = 1
-			}, completion: { (_) in
 
-			})
 		})
     enableGestures(true)
   }
@@ -290,7 +310,7 @@ open class ImagePickerController: UIViewController {
   }
 	
 	open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
-		return .fade
+		return .slide
 	}
 	
   func updateGalleryViewFrames() {
@@ -323,8 +343,35 @@ open class ImagePickerController: UIViewController {
     bottomContainer.stackView.startLoader()
 		self.cameraController.takePicture { [weak self] in
 			self?.isTakingPicture = false
+			self?.bottomContainer.pickerButton.isEnabled = true
 		}
   }
+}
+
+extension ImagePickerController: ImageGalleryUpdatedDelegate {
+
+	func imageGalleryDidUpdate(_ changes: PHFetchResultChangeDetails<PHAsset>?) {
+		guard let changes = changes else {
+			return
+		}
+		if changes.hasIncrementalChanges {
+			if let inserted = changes.insertedIndexes, inserted.count > 0 {
+				if let asset = self.galleryView.fetchResult?.objects(at: inserted).first {
+					if self.configuration.allowMultiplePhotoSelection == false {
+						self.stack.assets.removeAll()
+					}
+					self.stack.pushAsset(asset)
+				}
+			}
+			if let removed = changes.removedIndexes, removed.count > 0 {
+				for asset in changes.fetchResultBeforeChanges.objects(at: removed) {
+					if self.stack.assets.contains(asset) {
+						self.stack.dropAsset(asset)
+					}
+				}
+			}
+		}
+	}
 }
 
 // MARK: - Action methods
@@ -370,27 +417,6 @@ extension ImagePickerController: CameraViewDelegate {
     if configuration.flashButtonAlwaysHidden {
       topView.flashButton.isHidden = hidden
     }
-  }
-
-  func imageToLibrary() {
-    guard let collectionSize = galleryView.collectionSize else { return }
-
-    galleryView.fetchPhotos {
-      guard let asset = self.galleryView.assets.first else { return }
-      if self.configuration.allowMultiplePhotoSelection == false {
-        self.stack.assets.removeAll()
-      }
-      self.stack.pushAsset(asset)
-    }
-
-    galleryView.shouldTransform = true
-    bottomContainer.pickerButton.isEnabled = true
-
-    UIView.animate(withDuration: 0.3, animations: {
-      self.galleryView.collectionView.transform = CGAffineTransform(translationX: collectionSize.width, y: 0)
-      }, completion: { _ in
-        self.galleryView.collectionView.transform = CGAffineTransform.identity
-    })
   }
 
   func cameraNotAvailable() {

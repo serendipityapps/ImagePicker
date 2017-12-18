@@ -15,25 +15,21 @@ open class AssetManager {
     return UIImage(named: name, in: bundle, compatibleWith: traitCollection) ?? UIImage()
   }
 
-  open static func fetch(withConfiguration configuration: Configuration, _ completion: @escaping (_ assets: [PHAsset]) -> Void) {
-    guard PHPhotoLibrary.authorizationStatus() == .authorized else { return }
+    open static func fetch(withConfiguration configuration: Configuration, _ completion: @escaping (_ fetchResult: PHFetchResult<PHAsset>?) -> Void) {    guard PHPhotoLibrary.authorizationStatus() == .authorized else { return }
 
-    DispatchQueue.global(qos: .background).async {
-      let fetchResult = configuration.allowVideoSelection
-        ? PHAsset.fetchAssets(with: PHFetchOptions())
-        : PHAsset.fetchAssets(with: .image, options: PHFetchOptions())
+			DispatchQueue.global(qos: .background).async {
 
-      if fetchResult.count > 0 {
-        var assets = [PHAsset]()
-        fetchResult.enumerateObjects({ object, _, _ in
-          assets.insert(object, at: 0)
-        })
+				let fetchOptions = PHFetchOptions()
+				let sort = NSSortDescriptor(key: "creationDate", ascending: false)
+				fetchOptions.sortDescriptors = [sort]
+				fetchOptions.includeAssetSourceTypes = [.typeUserLibrary]
 
-        DispatchQueue.main.async {
-          completion(assets)
-        }
-      }
-    }
+				let fetchResult = configuration.allowVideoSelection ? PHAsset.fetchAssets(with: fetchOptions) : PHAsset.fetchAssets(with: .image, options: fetchOptions)
+
+				DispatchQueue.main.async {
+					completion(fetchResult)
+				}
+			}
   }
 
   open static func resolveAsset(_ asset: PHAsset, size: CGSize = CGSize(width: 720, height: 1280), resizeMode: PHImageRequestOptionsResizeMode = .fast, completion: @escaping (_ image: UIImage?) -> Void) {
