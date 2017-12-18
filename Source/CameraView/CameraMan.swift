@@ -119,14 +119,23 @@ class CameraMan {
   }
 
   func stop() {
-    self.session.stopRunning()
+		self.configure {
+			for input in session.inputs {
+				session.removeInput(input)
+			}
+			for output in session.outputs {
+				session.removeOutput(output)
+			}
+		}
 		self.frontCamera = nil
 		self.backCamera = nil
 		self.stillImageOutput = nil
-		for input in session.inputs {
-			session.removeInput(input)
+		queue.async {
+			self.session.stopRunning()
+			DispatchQueue.main.async {
+				self.delegate?.cameraManDidStop(self)
+			}
 		}
-		self.delegate?.cameraManDidStop(self)
   }
 
   func switchCamera(_ completion: (() -> Void)? = nil) {

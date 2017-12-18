@@ -21,35 +21,31 @@ public class CameraView: UIViewController, CLLocationManagerDelegate, CameraManD
 		cameraMan.stop()
 	}
 
-  lazy var blurView: UIVisualEffectView = { [unowned self] in
+  lazy var blurView: UIVisualEffectView = {
     let effect = UIBlurEffect(style: .dark)
     let blurView = UIVisualEffectView(effect: effect)
-
     return blurView
     }()
 
-  lazy var focusImageView: UIImageView = { [unowned self] in
+  lazy var focusImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.image = AssetManager.getImage("focusIcon")
     imageView.backgroundColor = UIColor.clear
     imageView.frame = CGRect(x: 0, y: 0, width: 110, height: 110)
     imageView.alpha = 0
-
     return imageView
     }()
 
-  lazy var capturedImageView: UIView = { [unowned self] in
+  lazy var capturedImageView: UIView = {
     let view = UIView()
     view.backgroundColor = UIColor.black
     view.alpha = 0
-
     return view
     }()
 
   lazy var containerView: UIView = {
     let view = UIView()
     view.alpha = 0
-
     return view
   }()
 
@@ -69,17 +65,16 @@ public class CameraView: UIViewController, CLLocationManagerDelegate, CameraManD
 	public var overlayTopConstraint: NSLayoutConstraint?
 	public var overlayBottomConstraint: NSLayoutConstraint?
 
-  lazy var noCameraLabel: UILabel = { [unowned self] in
+  lazy var noCameraLabel: UILabel = {
     let label = UILabel()
     label.font = self.configuration.noCameraFont
     label.textColor = self.configuration.noCameraTextColor
     label.text = self.configuration.noCameraTitle
     label.sizeToFit()
-
     return label
     }()
 
-  lazy var noCameraButton: UIButton = { [unowned self] in
+  lazy var noCameraButton: UIButton = {
     let button = UIButton(type: .system)
     let title = NSAttributedString(string: self.configuration.settingsTitle,
       attributes: [
@@ -94,21 +89,18 @@ public class CameraView: UIViewController, CLLocationManagerDelegate, CameraManD
     button.layer.borderWidth = 1
     button.layer.cornerRadius = 4
     button.addTarget(self, action: #selector(settingsButtonDidTap), for: .touchUpInside)
-
     return button
     }()
 
-  lazy var tapGestureRecognizer: UITapGestureRecognizer = { [unowned self] in
+  lazy var tapGestureRecognizer: UITapGestureRecognizer = {
     let gesture = UITapGestureRecognizer()
     gesture.addTarget(self, action: #selector(tapGestureRecognizerHandler(_:)))
-
     return gesture
     }()
 
-  lazy var pinchGestureRecognizer: UIPinchGestureRecognizer = { [unowned self] in
+  lazy var pinchGestureRecognizer: UIPinchGestureRecognizer = {
     let gesture = UIPinchGestureRecognizer()
     gesture.addTarget(self, action: #selector(pinchGestureRecognizerHandler(_:)))
-
     return gesture
     }()
 
@@ -277,7 +269,7 @@ public class CameraView: UIViewController, CLLocationManagerDelegate, CameraManD
   // MARK: - Timer methods
 
   @objc func timerDidFire() {
-    UIView.animate(withDuration: 0.3, animations: { [unowned self] in
+    UIView.animate(withDuration: 0.3, animations: {
       self.focusImageView.alpha = 0
       }, completion: { _ in
         self.focusImageView.transform = CGAffineTransform.identity

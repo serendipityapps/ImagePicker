@@ -15,11 +15,10 @@ class ButtonPicker: UIButton {
 
 	let configuration: Configuration
 
-  lazy var numberLabel: UILabel = { [unowned self] in
+  lazy var numberLabel: UILabel = {
     let label = UILabel()
     label.translatesAutoresizingMaskIntoConstraints = false
     label.font = self.configuration.numberLabelFont
-
     return label
     }()
 

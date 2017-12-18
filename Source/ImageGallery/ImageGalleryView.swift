@@ -15,7 +15,7 @@ open class ImageGalleryView: UIView {
 
 	var configuration = Configuration()
 
-  lazy open var collectionView: UICollectionView = { [unowned self] in
+  lazy open var collectionView: UICollectionView = {
     let collectionView = UICollectionView(frame: CGRect.zero,
       collectionViewLayout: self.collectionViewLayout)
     collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -23,29 +23,26 @@ open class ImageGalleryView: UIView {
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.dataSource = self
     collectionView.delegate = self
-
     return collectionView
     }()
 
-  lazy var collectionViewLayout: UICollectionViewLayout = { [unowned self] in
+  lazy var collectionViewLayout: UICollectionViewLayout = {
     let layout = ImageGalleryLayout(configuration: self.configuration)
     layout.scrollDirection = .horizontal
     layout.minimumInteritemSpacing = self.configuration.cellSpacing
     layout.minimumLineSpacing = self.configuration.cellSpacing
     layout.sectionInset = UIEdgeInsets(top: 0, left: configuration.cellSpacing, bottom: 0, right: configuration.cellSpacing)
-
     return layout
     }()
 
-  lazy var topSeparator: UIView = { [unowned self] in
+  lazy var topSeparator: UIView = {
     let view = UIView()
     view.translatesAutoresizingMaskIntoConstraints = false
     view.backgroundColor = self.configuration.gallerySeparatorColor
-
     return view
     }()
 
-  open lazy var noImagesLabel: UILabel = { [unowned self] in
+  open lazy var noImagesLabel: UILabel = {
     let label = UILabel()
     label.font = self.configuration.noImagesFont
     label.textColor = self.configuration.noImagesTextColor
@@ -53,7 +50,6 @@ open class ImageGalleryView: UIView {
     label.alpha = 0
     label.sizeToFit()
     self.addSubview(label)
-
     return label
     }()
 

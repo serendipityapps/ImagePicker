@@ -26,18 +26,16 @@ open class ImagePickerController: UIViewController {
 	@IBOutlet var constraintGalleryHeight: NSLayoutConstraint!
 	@IBOutlet var constraintTopGalleryToTopOfBottomContainer: NSLayoutConstraint!
 
-  lazy var cameraController: CameraView = { [unowned self] in
+  lazy var cameraController: CameraView = {
     let controller = CameraView(configuration: self.configuration)
     controller.delegate = self
     controller.startOnFrontCamera = self.startOnFrontCamera
-
     return controller
     }()
 
-  lazy var volumeView: MPVolumeView = { [unowned self] in
+  lazy var volumeView: MPVolumeView = {
     let view = MPVolumeView()
     view.frame = CGRect(x: 0, y: 0, width: 1, height: 1)
-
     return view
     }()
 
@@ -63,6 +61,7 @@ open class ImagePickerController: UIViewController {
 			self.galleryView.assets = []
 			self.galleryView.collectionView.reloadData()
 			self.galleryView.collectionView.alpha = 0
+			self.isTakingPicture = false
 	}
 
   var totalSize: CGSize { return UIScreen.main.bounds.size }
@@ -322,11 +321,9 @@ open class ImagePickerController: UIViewController {
     isTakingPicture = true
     bottomContainer.pickerButton.isEnabled = false
     bottomContainer.stackView.startLoader()
-    let action: () -> Void = { [unowned self] in
-      self.cameraController.takePicture { self.isTakingPicture = false }
-    }
-
-		action()
+		self.cameraController.takePicture { [weak self] in
+			self?.isTakingPicture = false
+		}
   }
 }
 

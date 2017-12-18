@@ -21,7 +21,7 @@ open class TopView: UIView {
 		return [self.configuration.flashButtonTitleAUTO, self.configuration.flashButtonTitleON, self.configuration.flashButtonTitleOFF]
 	}()
 
-  open lazy var flashButton: UIButton = { [unowned self] in
+  open lazy var flashButton: UIButton = {
     let button = UIButton()
     button.setImage(self.configuration.flashButtonImageAUTO, for: UIControlState())
     button.setTitle("AUTO", for: UIControlState())
@@ -34,7 +34,7 @@ open class TopView: UIView {
     return button
     }()
 
-  open lazy var rotateCamera: UIButton = { [unowned self] in
+  open lazy var rotateCamera: UIButton = {
     let button = UIButton()
     button.setImage(self.configuration.cameraRotationIconImage, for: UIControlState())
     button.addTarget(self, action: #selector(rotateCameraButtonDidPress(_:)), for: .touchUpInside)

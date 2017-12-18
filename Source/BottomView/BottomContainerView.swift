@@ -41,12 +41,11 @@ open class BottomContainerView: UIView {
 
 	var configuration = Configuration()
 
-  lazy var pickerButton: ButtonPicker = { [unowned self] in
+  lazy var pickerButton: ButtonPicker = {
     let pickerButton = ButtonPicker(configuration: self.configuration)
     pickerButton.setTitleColor(self.configuration.cameraShutterControlTextColor, for: UIControlState())
     pickerButton.delegate = self
     pickerButton.numberLabel.isHidden = !self.configuration.showsImageCountLabel
-
     return pickerButton
     }()
 
@@ -59,7 +58,7 @@ open class BottomContainerView: UIView {
     return view
     }()
 	
-	open lazy var actionButton: UIButton = { [unowned self] in
+	open lazy var actionButton: UIButton = {
 		let button = UIButton()
 		button.setTitle(self.configuration.cancelButtonTitle, for: UIControlState())
 		button.setTitleColor(self.configuration.cancelButtonTextColor, for: UIControlState())
@@ -76,17 +75,15 @@ open class BottomContainerView: UIView {
 
 	lazy var stackView = ImageStackView(frame: CGRect(x: 0, y: 0, width: 80, height: 80), configuration: self.configuration)
 
-  lazy var topSeparator: UIView = { [unowned self] in
+  lazy var topSeparator: UIView = {
     let view = UIView()
     view.backgroundColor = self.configuration.backgroundColor
-
     return view
     }()
 
-  lazy var tapGestureRecognizer: UITapGestureRecognizer = { [unowned self] in
+  lazy var tapGestureRecognizer: UITapGestureRecognizer = {
     let gesture = UITapGestureRecognizer()
     gesture.addTarget(self, action: #selector(handleTapGestureRecognizer(_:)))
-
     return gesture
     }()
 
