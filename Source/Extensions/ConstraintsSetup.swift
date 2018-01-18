@@ -69,7 +69,7 @@ extension BottomContainerView {
     addConstraint(stackViewX)
 
 		let stackViewToPickerMinimum = NSLayoutConstraint(item: stackView, attribute: .trailing,
-																												 relatedBy: .greaterThanOrEqual, toItem: actionButton, attribute: .leading,
+																												 relatedBy: .greaterThanOrEqual, toItem: pickerButton, attribute: .leading,
 																												 multiplier: 1, constant: 12)
 		addConstraint(stackViewToPickerMinimum)
 
