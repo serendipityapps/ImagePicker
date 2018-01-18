@@ -189,6 +189,13 @@ open class ImagePickerController: UIViewController {
 		})
   }
 
+	open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+		super.viewWillTransition(to: size, with: coordinator)
+
+		self.view.setNeedsLayout()
+		self.view.layoutIfNeeded()
+	}
+
   open func resetAssets() {
     self.stack.resetAssets([])
   }
