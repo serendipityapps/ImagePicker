@@ -148,6 +148,7 @@ open class ImagePickerController: UIViewController {
 
 		galleryView.updateFrames()
 		galleryView.collectionViewLayout.invalidateLayout()
+		galleryView.layoutIfNeeded()
 		self.updateGalleryViewFrames()
 		self.galleryView.collectionView.transform = CGAffineTransform.identity
 		self.galleryView.collectionView.contentInset = UIEdgeInsets.zero
@@ -189,16 +190,15 @@ open class ImagePickerController: UIViewController {
 		})
   }
 
-	open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-		super.viewWillTransition(to: size, with: coordinator)
+	open override func viewDidLayoutSubviews() {
+		super.viewDidLayoutSubviews()
 
 		galleryView.updateFrames()
 		galleryView.collectionViewLayout.invalidateLayout()
+		galleryView.layoutIfNeeded()
 		self.updateGalleryViewFrames()
 		self.galleryView.collectionView.transform = CGAffineTransform.identity
 		self.galleryView.collectionView.contentInset = UIEdgeInsets.zero
-		self.view.setNeedsLayout()
-		self.view.layoutIfNeeded()
 	}
 
   open func resetAssets() {
