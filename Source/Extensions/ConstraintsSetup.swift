@@ -56,8 +56,8 @@ extension BottomContainerView {
 		actionButtonX.priority = UILayoutPriority(rawValue: 750)
     addConstraint(actionButtonX)
 
-		let actionButtonToPickerMinimum = NSLayoutConstraint(item: pickerButton, attribute: .leading,
-																												 relatedBy: .greaterThanOrEqual, toItem: actionButton, attribute: .trailing,
+		let actionButtonToPickerMinimum = NSLayoutConstraint(item: pickerButton, attribute: .trailing,
+																												 relatedBy: .greaterThanOrEqual, toItem: actionButton, attribute: .leading,
 																												 multiplier: 1, constant: 12)
 		addConstraint(actionButtonToPickerMinimum)
 
