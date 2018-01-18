@@ -50,13 +50,28 @@ extension BottomContainerView {
 
     let screenSize = Helper.screenSizeForOrientation()
 
-    addConstraint(NSLayoutConstraint(item: actionButton, attribute: .centerX,
-      relatedBy: .equal, toItem: self, attribute: .right,
-      multiplier: 1, constant: -(screenSize.width - (ButtonPicker.Dimensions.buttonBorderSize + screenSize.width)/2)/2))
+		let actionButtonX = NSLayoutConstraint(item: actionButton, attribute: .centerX,
+													 relatedBy: .equal, toItem: self, attribute: .right,
+													 multiplier: 1, constant: -(screenSize.width - (ButtonPicker.Dimensions.buttonBorderSize + screenSize.width)/2)/2)
+		actionButtonX.priority = UILayoutPriority(rawValue: 750)
+    addConstraint(actionButtonX)
 
-    addConstraint(NSLayoutConstraint(item: stackView, attribute: .centerX,
-      relatedBy: .equal, toItem: self, attribute: .left,
-      multiplier: 1, constant: screenSize.width/4 - ButtonPicker.Dimensions.buttonBorderSize/3))
+		let actionButtonToPickerMinimum = NSLayoutConstraint(item: pickerButton, attribute: .leading,
+																												 relatedBy: .greaterThanOrEqual, toItem: actionButton, attribute: .trailing,
+																												 multiplier: 1, constant: 12)
+		addConstraint(actionButtonToPickerMinimum)
+
+
+		let stackViewX = NSLayoutConstraint(item: stackView, attribute: .centerX,
+																				relatedBy: .equal, toItem: self, attribute: .left,
+																				multiplier: 1, constant: screenSize.width/4 - ButtonPicker.Dimensions.buttonBorderSize/3)
+		stackViewX.priority = UILayoutPriority(rawValue: 750)
+    addConstraint(stackViewX)
+
+		let stackViewToPickerMinimum = NSLayoutConstraint(item: stackView, attribute: .trailing,
+																												 relatedBy: .greaterThanOrEqual, toItem: actionButton, attribute: .leading,
+																												 multiplier: 1, constant: 12)
+		addConstraint(stackViewToPickerMinimum)
 
     addConstraint(NSLayoutConstraint(item: topSeparator, attribute: .height,
       relatedBy: .equal, toItem: nil, attribute: .notAnAttribute,
