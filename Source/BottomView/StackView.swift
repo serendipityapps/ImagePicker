@@ -7,10 +7,6 @@ protocol ImageStackViewDelegate: class {
 
 class ImageStackView: UIView {
 
-  struct Dimensions {
-    static let imageSize: CGFloat = 58
-  }
-
   weak var delegate: ImageStackViewDelegate?
 	let configuration: Configuration
 
@@ -77,7 +73,7 @@ class ImageStackView: UIView {
   }
 
   override func layoutSubviews() {
-    let step: CGFloat = -3.0
+    let step: CGFloat = configuration.stackViewStepOffset
     let scale: CGFloat = 0.8
     let viewSize = CGSize(width: frame.width * scale,
       height: frame.height * scale)
@@ -142,7 +138,7 @@ extension ImageStackView {
 
     for (index, view) in views.enumerated() {
       if index <= photos.count - 1 {
-        AssetManager.resolveAsset(photos[index], size: CGSize(width: Dimensions.imageSize, height: Dimensions.imageSize)) { image in
+        AssetManager.resolveAsset(photos[index], size: configuration.stackViewImageSize) { image in
           view.image = image
         }
         view.alpha = 1

@@ -58,6 +58,8 @@ open class Configuration {
   public var indicatorHeight: CGFloat = 8
 	public var galleryHeight: CGFloat = 160
 	public var galleryBarHeight: CGFloat = 24
+	public var stackViewStepOffset: CGFloat = -3.0
+	public var stackViewImageSize: CGSize = CGSize(width: 78, height: 78)
 
   // MARK: Custom behaviour
 

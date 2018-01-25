@@ -31,9 +31,16 @@ extension BottomContainerView {
         relatedBy: .equal, toItem: nil, attribute: .notAnAttribute,
         multiplier: 1, constant: ButtonPicker.Dimensions.buttonBorderSize))
 
-      addConstraint(NSLayoutConstraint(item: stackView, attribute: attribute,
-        relatedBy: .equal, toItem: nil, attribute: .notAnAttribute,
-        multiplier: 1, constant: ImageStackView.Dimensions.imageSize))
+			if attribute == .width {
+				addConstraint(NSLayoutConstraint(item: stackView, attribute: attribute,
+																				 relatedBy: .equal, toItem: nil, attribute: .notAnAttribute,
+																				 multiplier: 1, constant: configuration.stackViewImageSize.width))
+			}
+			if attribute == .height {
+				addConstraint(NSLayoutConstraint(item: stackView, attribute: attribute,
+																				 relatedBy: .equal, toItem: nil, attribute: .notAnAttribute,
+																				 multiplier: 1, constant: configuration.stackViewImageSize.height))
+			}
     }
 
     addConstraint(NSLayoutConstraint(item: actionButton, attribute: .centerY,
