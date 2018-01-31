@@ -314,7 +314,7 @@ open class ImagePickerController: UIViewController {
     return (imageLimit == 0 || imageLimit > galleryView.selectedStack.assets.count)
     }
 
-	func takePicture() {
+	public func takePicture() {
     guard isBelowImageLimit() && !isTakingPicture else { return }
     isTakingPicture = true
     bottomContainer.pickerButton.isEnabled = false
