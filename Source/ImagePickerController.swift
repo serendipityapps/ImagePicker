@@ -33,14 +33,6 @@ open class ImagePickerController: UIViewController {
     return controller
     }()
 
-  lazy var volumeView: MPVolumeView = {
-    let view = MPVolumeView()
-    view.frame = CGRect(x: 0, y: 0, width: 1, height: 1)
-    return view
-    }()
-
-  var volume = AVAudioSession.sharedInstance().outputVolume
-
   open weak var delegate: ImagePickerDelegate?
   open var stack = ImageStack()
   open var imageLimit = 0
@@ -122,10 +114,6 @@ open class ImagePickerController: UIViewController {
 
 		cameraController.didMove(toParentViewController: self)
 
-
-    view.addSubview(volumeView)
-    view.sendSubview(toBack: volumeView)
-
     view.backgroundColor = UIColor.white
     view.backgroundColor = configuration.mainColor
 
@@ -134,10 +122,6 @@ open class ImagePickerController: UIViewController {
 
   open override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-
-    if configuration.managesAudioSession {
-      _ = try? AVAudioSession.sharedInstance().setActive(true)
-    }
 		
 		applyOrientationTransforms()
 
@@ -260,10 +244,6 @@ open class ImagePickerController: UIViewController {
   // MARK: - Notifications
 
   deinit {
-    if configuration.managesAudioSession {
-      _ = try? AVAudioSession.sharedInstance().setActive(false)
-    }
-
     NotificationCenter.default.removeObserver(self)
   }
 
@@ -284,11 +264,6 @@ open class ImagePickerController: UIViewController {
       object: nil)
 
     NotificationCenter.default.addObserver(self,
-      selector: #selector(volumeChanged(_:)),
-      name: NSNotification.Name(rawValue: "AVSystemController_SystemVolumeDidChangeNotification"),
-      object: nil)
-
-    NotificationCenter.default.addObserver(self,
       selector: #selector(handleRotation(_:)),
       name: NSNotification.Name.UIDeviceOrientationDidChange,
       object: nil)
@@ -298,15 +273,6 @@ open class ImagePickerController: UIViewController {
     adjustButtonTitle(notification)
     galleryView.collectionView.reloadData()
     galleryView.collectionView.setContentOffset(CGPoint.zero, animated: false)
-  }
-
-  @objc func volumeChanged(_ notification: Notification) {
-    guard let slider = volumeView.subviews.filter({ $0 is UISlider }).first as? UISlider,
-      let userInfo = (notification as NSNotification).userInfo,
-      let changeReason = userInfo["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as? String, changeReason == "ExplicitVolumeChange" else { return }
-
-    slider.setValue(volume, animated: false)
-    takePicture()
   }
 
   @objc func adjustButtonTitle(_ notification: Notification) {
@@ -348,7 +314,7 @@ open class ImagePickerController: UIViewController {
     return (imageLimit == 0 || imageLimit > galleryView.selectedStack.assets.count)
     }
 
-  fileprivate func takePicture() {
+	func takePicture() {
     guard isBelowImageLimit() && !isTakingPicture else { return }
     isTakingPicture = true
     bottomContainer.pickerButton.isEnabled = false

@@ -69,7 +69,6 @@ open class Configuration {
   public var allowVideoSelection = false
   public var showsImageCountLabel = true
   public var flashButtonAlwaysHidden = false
-  public var managesAudioSession = true
   public var allowPinchToZoom = true
   public var allowedOrientations = UIInterfaceOrientationMask.all
 	public var cameraHasOverlay = true
