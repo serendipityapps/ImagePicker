@@ -112,7 +112,7 @@ open class Configuration {
 
 		AssetManager.resolveAsset(asset, size: CGSize(width: 160, height: 240)) { image in
 			if let image = image {
-				cell.configureCell(image)
+				cell.configureCell(image.image)
 				
 				if (indexPath as NSIndexPath).row == 0 && imageGalleryView.shouldTransform {
 					cell.transform = CGAffineTransform(scaleX: 0, y: 0)
