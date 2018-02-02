@@ -2,10 +2,21 @@ import UIKit
 import MediaPlayer
 import Photos
 
+@objc public class ImagePickerImage: NSObject {
+
+	let image: UIImage
+	var cllocation: CLLocation?
+
+	init(image: UIImage, location: CLLocation?) {
+		self.image = image
+		self.cllocation = location
+	}
+}
+
 @objc public protocol ImagePickerDelegate: class {
 
-  func wrapperDidPress(_ imagePicker: ImagePickerController, images: [UIImage])
-  func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [UIImage])
+  func wrapperDidPress(_ imagePicker: ImagePickerController, images: [ImagePickerImage])
+  func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [ImagePickerImage])
   func cancelButtonDidPress(_ imagePicker: ImagePickerController)
 }
 
@@ -361,7 +372,7 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func doneButtonDidPress() {
-    var images: [UIImage]
+    let images: [ImagePickerImage]
     if let preferredImageSize = preferredImageSize {
       images = AssetManager.resolveAssets(stack.assets, size: preferredImageSize, resizeMode: resizeModeIfPreferredImageSize)
     } else {
@@ -378,7 +389,7 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func imageStackViewDidPress() {
-    var images: [UIImage]
+    let images: [ImagePickerImage]
     if let preferredImageSize = preferredImageSize {
 			images = AssetManager.resolveAssets(stack.assets, size: preferredImageSize, resizeMode: resizeModeIfPreferredImageSize)
     } else {

@@ -32,33 +32,42 @@ open class AssetManager {
 			}
   }
 
-  open static func resolveAsset(_ asset: PHAsset, size: CGSize = CGSize(width: 720, height: 1280), resizeMode: PHImageRequestOptionsResizeMode = .fast, completion: @escaping (_ image: UIImage?) -> Void) {
+  open static func resolveAsset(_ asset: PHAsset, size: CGSize = CGSize(width: 720, height: 1280), resizeMode: PHImageRequestOptionsResizeMode = .fast, completion: @escaping (_ image: ImagePickerImage?) -> Void) {
     let imageManager = PHImageManager.default()
     let requestOptions = PHImageRequestOptions()
     requestOptions.deliveryMode = .highQualityFormat
     requestOptions.isNetworkAccessAllowed = true
 		requestOptions.resizeMode = resizeMode
 
+		let location = asset.location
+
     imageManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: requestOptions) { image, info in
       if let info = info, info["PHImageFileUTIKey"] == nil {
         DispatchQueue.main.async(execute: {
-          completion(image)
+					if let image = image {
+						let imagePickerImage = ImagePickerImage(image: image, location: location)
+          	completion(imagePickerImage)
+					} else {
+						completion(nil)
+					}
         })
       }
     }
   }
 
-  open static func resolveAssets(_ assets: [PHAsset], size: CGSize = CGSize(width: 720, height: 1280), resizeMode: PHImageRequestOptionsResizeMode = .fast) -> [UIImage] {
+  open static func resolveAssets(_ assets: [PHAsset], size: CGSize = CGSize(width: 720, height: 1280), resizeMode: PHImageRequestOptionsResizeMode = .fast) -> [ImagePickerImage] {
     let imageManager = PHImageManager.default()
     let requestOptions = PHImageRequestOptions()
     requestOptions.isSynchronous = true
 		requestOptions.resizeMode = resizeMode
 
-    var images = [UIImage]()
+    var images = [ImagePickerImage]()
     for asset in assets {
+			let location = asset.location
       imageManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: requestOptions) { image, _ in
         if let image = image {
-          images.append(image)
+					let imagePickerImage = ImagePickerImage(image: image, location: location)
+          images.append(imagePickerImage)
         }
       }
     }
