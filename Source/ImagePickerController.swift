@@ -4,10 +4,10 @@ import Photos
 
 @objc public class ImagePickerImage: NSObject {
 
-	let image: UIImage
-	var cllocation: CLLocation?
+	public let image: UIImage
+	public var cllocation: CLLocation?
 
-	init(image: UIImage, location: CLLocation?) {
+	public init(image: UIImage, location: CLLocation?) {
 		self.image = image
 		self.cllocation = location
 	}
