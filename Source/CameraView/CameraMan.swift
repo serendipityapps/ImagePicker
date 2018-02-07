@@ -116,6 +116,8 @@ class CameraMan {
         self.delegate?.cameraManDidStart(self)
       }
     }
+
+		flash(.auto)
   }
 
   func stop() {
