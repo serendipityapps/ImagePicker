@@ -126,7 +126,7 @@ open class ImagePickerController: UIViewController {
 		cameraController.didMove(toParentViewController: self)
 
     view.backgroundColor = UIColor.white
-    view.backgroundColor = configuration.mainColor
+    view.backgroundColor = configuration.backgroundColor
 
     subscribe()
   }
