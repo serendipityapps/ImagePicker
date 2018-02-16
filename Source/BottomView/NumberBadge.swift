@@ -51,6 +51,9 @@ class NumberBadge: UIView {
 					badgeValue = count
 					numberLabel.invalidateIntrinsicContentSize()
 				}
+			} else {
+				self.numberLabel.text = "\(count)"
+				self.badgeValue = count
 			}
 		}
 	}
