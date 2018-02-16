@@ -23,6 +23,10 @@ class NumberBadge: UIView {
 		if badgeValue == 0 {
 			if count > 0 {
 				self.numberLabel.text = "\(count)"
+				badgeValue = count
+				numberLabel.invalidateIntrinsicContentSize()
+				self.invalidateIntrinsicContentSize()
+				self.layoutIfNeeded()
 				if animated {
 					UIView.animate(withDuration: 0.2) {
 						self.alpha = 1
@@ -34,11 +38,18 @@ class NumberBadge: UIView {
 		} else {
 			if count == 0 {
 				if animated {
-					UIView.animate(withDuration: 0.2) {
+					UIView.animate(withDuration: 0.2, animations: {
 						self.alpha = 0
+					}) { (success) in
+						self.numberLabel.text = "\(count)"
+						self.badgeValue = count
+						self.numberLabel.invalidateIntrinsicContentSize()
 					}
 				} else {
 					self.alpha = 0
+					self.numberLabel.text = "\(count)"
+					badgeValue = count
+					numberLabel.invalidateIntrinsicContentSize()
 				}
 			}
 		}
