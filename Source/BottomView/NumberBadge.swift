@@ -17,8 +17,6 @@ class NumberBadge: UIView {
 		}
 	}
 
-	var content : UIView!
-
 	var numberLabel: UILabel!
 
 	var badgeValue: Int = 0 {
@@ -64,9 +62,9 @@ class NumberBadge: UIView {
 	var badgeBackgroundColor : UIColor? {
 		didSet {
 			if let badgeBackgroundColor = badgeBackgroundColor {
-				self.content.backgroundColor = badgeBackgroundColor
+				self.backgroundColor = badgeBackgroundColor
 			} else {
-				self.content.backgroundColor = UIColor.red
+				self.backgroundColor = UIColor.red
 			}
 		}
 	}
@@ -129,7 +127,7 @@ class NumberBadge: UIView {
 
 		self.backgroundColor = UIColor.clear
 
-		self.layer.cornerRadius = self.content.bounds.size.height/2
+		self.layer.cornerRadius = self.bounds.size.height/2
 	}
 
 	override var intrinsicContentSize : CGSize {
@@ -148,6 +146,6 @@ class NumberBadge: UIView {
 	override func layoutSubviews() {
 		super.layoutSubviews()
 
-		self.layer.cornerRadius = self.content.bounds.size.height/2
+		self.layer.cornerRadius = self.bounds.size.height/2
 	}
 }
