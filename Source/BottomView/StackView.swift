@@ -17,6 +17,9 @@ class ImageStackView: UIView {
     return view
     }()
 
+	var numberBadgeXConstraint: NSLayoutConstraint!
+	var numberBadgeYConstraint: NSLayoutConstraint!
+
   lazy var views: [UIImageView] = {
     var array = [UIImageView]()
     for _ in 0...self.configuration.numberOfImagesAllowedInStackView {
@@ -54,8 +57,10 @@ class ImageStackView: UIView {
 
 		imageCountBadge.translatesAutoresizingMaskIntoConstraints = false
 		addSubview(imageCountBadge)
-		addConstraint(NSLayoutConstraint(item: imageCountBadge, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1.0, constant: 0))
-		addConstraint(NSLayoutConstraint(item: imageCountBadge, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1.0, constant: -self.configuration.stackViewImageSize.height))
+		numberBadgeXConstraint = NSLayoutConstraint(item: imageCountBadge, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1.0, constant: 0)
+		addConstraint(numberBadgeXConstraint)
+		numberBadgeYConstraint = NSLayoutConstraint(item: imageCountBadge, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1.0, constant: -self.configuration.stackViewImageSize.height)
+		addConstraint(numberBadgeYConstraint)
 
     addSubview(activityView)
     views.first?.alpha = 1
@@ -129,6 +134,9 @@ extension ImageStackView {
     if let sender = notification.object as? ImageStack {
       renderViews(sender.assets)
 			imageCountBadge.badgeValue = sender.assets.count
+			if let firstView = views.first {
+				numberBadgeYConstraint.constant = -firstView.bounds.size.height
+			}
       activityView.stopAnimating()
     }
 
@@ -138,6 +146,9 @@ extension ImageStackView {
     if let sender = notification.object as? ImageStack {
       renderViews(sender.assets)
 			imageCountBadge.badgeValue = sender.assets.count
+			if let firstView = views.first {
+				numberBadgeYConstraint.constant = -firstView.bounds.size.height
+			}
       activityView.stopAnimating()
     }
   }
