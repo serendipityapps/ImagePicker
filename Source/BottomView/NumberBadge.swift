@@ -110,7 +110,7 @@ class NumberBadge: UIView {
 
 		numberLabel.frame = self.bounds
 		numberLabel.translatesAutoresizingMaskIntoConstraints = false
-		self.addSubview(subview)
+		self.addSubview(numberLabel)
 
 		let top = NSLayoutConstraint(item: numberLabel, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.top, multiplier: 1.0, constant: 0)
 		let leading = NSLayoutConstraint(item: numberLabel, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.leading, multiplier: 1.0, constant: 0)
