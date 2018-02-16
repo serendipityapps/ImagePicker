@@ -71,6 +71,12 @@ open class ImagePickerController: UIViewController {
   var totalSize: CGSize { return UIScreen.main.bounds.size }
   var numberOfCells: Int?
 
+	public var infoLabelText: String? {
+		didSet {
+			self.topView.infoLabel.text = infoLabelText
+		}
+	}
+	
   fileprivate var isTakingPicture = false
 
   // MARK: - Initialization

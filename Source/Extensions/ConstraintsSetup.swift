@@ -103,6 +103,13 @@ extension TopView {
       relatedBy: .greaterThanOrEqual, toItem: nil, attribute: .notAnAttribute,
       multiplier: 1, constant: 86))
 
+		addConstraint(NSLayoutConstraint(item: infoLabel, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1.0, constant: 0))
+		addConstraint(NSLayoutConstraint(item: infoLabel, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: flashButton, attribute: .trailing, multiplier: 1.0, constant: 0))
+		addConstraint(NSLayoutConstraint(item: infoLabel, attribute: .trailing, relatedBy: .greaterThanOrEqual, toItem: rotateCamera, attribute: .leading, multiplier: 1.0, constant: 0))
+		addConstraint(NSLayoutConstraint(item: infoLabel, attribute: .centerY,
+																		 relatedBy: .equal, toItem: self, attribute: .centerY,
+																		 multiplier: 1, constant: 0))
+
     if configuration.canRotateCamera {
       addConstraint(NSLayoutConstraint(item: self, attribute: .trailing,
         relatedBy: .equal, toItem: rotateCamera, attribute: .trailing,

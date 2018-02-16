@@ -19,11 +19,11 @@ class ImageStackView: UIView {
 
   lazy var views: [UIImageView] = {
     var array = [UIImageView]()
-    for _ in 0...3 {
+    for _ in 0...self.configuration.numberOfImagesAllowedInStackView {
       let view = UIImageView()
-      view.layer.cornerRadius = 3
+      view.layer.cornerRadius = self.configuration.stackViewCornerRadius
       view.layer.borderColor = self.configuration.photosToUseBorderColor.cgColor
-      view.layer.borderWidth = 1
+      view.layer.borderWidth = self.configuration.stackViewBorderWidth
       view.contentMode = .scaleAspectFill
       view.clipsToBounds = true
       view.alpha = 0
@@ -134,7 +134,7 @@ extension ImageStackView {
       return
     }
 
-    let photos = Array(assets.suffix(4))
+    let photos = Array(assets.suffix(self.configuration.numberOfImagesAllowedInStackView))
 
     for (index, view) in views.enumerated() {
       if index <= photos.count - 1 {

@@ -42,6 +42,17 @@ open class TopView: UIView {
     return button
     }()
 
+	open lazy var infoLabel: UILabel = {
+		let label = UILabel(frame: CGRect.zero)
+		label.textColor = self.configuration.infoLabelTextColor
+		label.font = self.configuration.infoTextLabelFont
+		label.shadowColor = self.configuration.infoLabelShadowTextColor
+		label.textAlignment = .center
+		label.lineBreakMode = .byTruncatingTail
+		label.numberOfLines = 0
+		return label
+	}()
+
   weak var delegate: TopViewDelegate?
 
   // MARK: - Initializers
@@ -62,6 +73,10 @@ open class TopView: UIView {
   required public init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
   }
+
+	public func updateInfoLabelText(text: String) {
+		infoLabel.text = text
+	}
 
   func configure() {
     var buttons: [UIButton] = [flashButton]

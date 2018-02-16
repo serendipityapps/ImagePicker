@@ -26,6 +26,8 @@ open class Configuration {
 	public var doneButtonTextColor = UIColor.white
 	public var doneButtonBackgroundColor = UIColor.black
 	public var doneButtonHighlightBackgroundColor = UIColor.gray
+	public var infoLabelTextColor = UIColor.white
+	public var infoLabelShadowTextColor = UIColor.darkGray
 
   // MARK: Fonts
 
@@ -35,6 +37,7 @@ open class Configuration {
   public var noImagesFont = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.medium)
   public var noCameraFont = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.medium)
   public var settingsFont = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.medium)
+	public var infoTextLabelFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
 
   // MARK: Titles
 
@@ -51,6 +54,8 @@ open class Configuration {
 	public var flashButtonTitleON = "ON"
 	public var flashButtonTitleOFF = "OFF"
 
+	public var infoLabelText = ""
+
   // MARK: Dimensions
 
   public var cellSpacing: CGFloat = 2
@@ -60,6 +65,8 @@ open class Configuration {
 	public var galleryBarHeight: CGFloat = 24
 	public var stackViewStepOffset: CGFloat = -3.0
 	public var stackViewImageSize: CGSize = CGSize(width: 78, height: 78)
+	public var stackViewBorderWidth: CGFloat = 1.0
+	public var stackViewCornerRadius: CGFloat = 3.0
 
   // MARK: Custom behaviour
 
@@ -75,6 +82,8 @@ open class Configuration {
 
 	public var cancelButtonHandler: (() -> Void)?
 	public var doneButtonHandler: (() -> Void)?
+
+	public var numberOfImagesAllowedInStackView: Int = 3
 	
   // MARK: Images
   public var indicatorView: UIView = {
