@@ -57,7 +57,7 @@ class ImageStackView: UIView {
 
 		imageCountBadge.translatesAutoresizingMaskIntoConstraints = false
 		addSubview(imageCountBadge)
-		numberBadgeXConstraint = NSLayoutConstraint(item: imageCountBadge, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1.0, constant: -6)
+		numberBadgeXConstraint = NSLayoutConstraint(item: imageCountBadge, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1.0, constant: -5)
 		addConstraint(numberBadgeXConstraint)
 		numberBadgeYConstraint = NSLayoutConstraint(item: imageCountBadge, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1.0, constant: -self.configuration.stackViewImageSize.height)
 		addConstraint(numberBadgeYConstraint)
