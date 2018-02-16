@@ -79,10 +79,7 @@ class NumberBadge: UIView {
 		}
 	}
 
-
 	fileprivate let defaultTextSize : CGFloat = 11
-
-	fileprivate var nibName : String = "NumberBadgeView"
 
 	fileprivate var numberFormatter : NumberFormatter!
 
@@ -105,7 +102,7 @@ class NumberBadge: UIView {
 
 		self.numberLabel = UILabel(frame: CGRect.zero)
 		self.numberLabel.numberOfLines = 1
-
+		numberLabel.textAlignment = .center
 		numberLabel.frame = self.bounds
 		numberLabel.translatesAutoresizingMaskIntoConstraints = false
 		self.addSubview(numberLabel)
@@ -135,10 +132,10 @@ class NumberBadge: UIView {
 			let size = numberLabel.intrinsicContentSize
 
 			var newSize = size
-			newSize.width += 8.0
+			newSize.width += 10.0
 
-			if newSize.height < 16 {
-				newSize.height = 16
+			if newSize.height < 20 {
+				newSize.height = 20
 			}
 			return newSize
 	}
