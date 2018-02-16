@@ -68,6 +68,35 @@ open class ImagePickerController: UIViewController {
 			cameraController.overlayView.alpha = 0
 	}
 
+	public func hideInfoMessage(animated: Bool) {
+
+		if animated {
+			UIView.animate(withDuration: 0.2, animations: {
+				self.topView.infoLabel.alpha = 0
+				self.topView.flashButton.titleLabel?.alpha = 1
+			}) { (success) in
+
+			}
+		} else {
+			self.topView.infoLabel.alpha = 0
+			self.topView.flashButton.titleLabel?.alpha = 1
+		}
+	}
+
+	public func showInfoMessage(animated: Bool) {
+		if animated {
+			UIView.animate(withDuration: 0.2, animations: {
+				self.topView.infoLabel.alpha = 1
+				self.topView.flashButton.titleLabel?.alpha = 0
+			}) { (success) in
+
+			}
+		} else {
+			self.topView.infoLabel.alpha = 1
+			self.topView.flashButton.titleLabel?.alpha = 0
+		}
+	}
+
   var totalSize: CGSize { return UIScreen.main.bounds.size }
   var numberOfCells: Int?
 
