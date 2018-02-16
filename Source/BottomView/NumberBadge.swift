@@ -28,17 +28,23 @@ class NumberBadge: UIView {
 				self.invalidateIntrinsicContentSize()
 				self.layoutIfNeeded()
 				if animated {
-					UIView.animate(withDuration: 0.2) {
+					self.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+					UIView.animate(withDuration: 0.3, animations: {
+						self.transform = CGAffineTransform.identity
 						self.alpha = 1
-					}
+					})
+
 				} else {
+					self.transform = CGAffineTransform.identity
 					self.alpha = 1
 				}
 			}
 		} else {
 			if count == 0 {
 				if animated {
-					UIView.animate(withDuration: 0.2, animations: {
+					self.transform = CGAffineTransform.identity
+					UIView.animate(withDuration: 0.3, animations: {
+						self.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
 						self.alpha = 0
 					}) { (success) in
 						self.numberLabel.text = "\(count)"
@@ -46,6 +52,7 @@ class NumberBadge: UIView {
 						self.numberLabel.invalidateIntrinsicContentSize()
 					}
 				} else {
+					self.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
 					self.alpha = 0
 					self.numberLabel.text = "\(count)"
 					badgeValue = count
@@ -57,7 +64,6 @@ class NumberBadge: UIView {
 			}
 		}
 	}
-
 	var badgeValue: Int = 0 {
 		didSet {
 			overrideBadgeWithString = self.numberFormatter.string(from: NSNumber(value: Int32(badgeValue)))
