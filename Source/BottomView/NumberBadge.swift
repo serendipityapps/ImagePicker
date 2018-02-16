@@ -132,10 +132,10 @@ class NumberBadge: UIView {
 			let size = numberLabel.intrinsicContentSize
 
 			var newSize = size
-			newSize.width += 10.0
+			newSize.width += 8.0
 
-			if newSize.height < 20 {
-				newSize.height = 20
+			if newSize.height < 16 {
+				newSize.height = 16
 			}
 			return newSize
 	}
