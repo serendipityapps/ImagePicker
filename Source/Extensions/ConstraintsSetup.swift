@@ -104,8 +104,12 @@ extension TopView {
       multiplier: 1, constant: 86))
 
 		addConstraint(NSLayoutConstraint(item: infoLabel, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1.0, constant: 0))
-		addConstraint(NSLayoutConstraint(item: infoLabel, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: flashButton, attribute: .trailing, multiplier: 1.0, constant: 0))
-		addConstraint(NSLayoutConstraint(item: infoLabel, attribute: .trailing, relatedBy: .greaterThanOrEqual, toItem: rotateCamera, attribute: .leading, multiplier: 1.0, constant: 0))
+		let leading = NSLayoutConstraint(item: infoLabel, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: flashButton, attribute: .trailing, multiplier: 1.0, constant: 0)
+		leading.priority = UILayoutPriority(rawValue: 999)
+		addConstraint(leading)
+		let trailing = NSLayoutConstraint(item: infoLabel, attribute: .trailing, relatedBy: .greaterThanOrEqual, toItem: rotateCamera, attribute: .leading, multiplier: 1.0, constant: 0)
+		trailing.priority = UILayoutPriority(rawValue: 999)
+		addConstraint(trailing)
 		addConstraint(NSLayoutConstraint(item: infoLabel, attribute: .centerY,
 																		 relatedBy: .equal, toItem: self, attribute: .centerY,
 																		 multiplier: 1, constant: 0))
