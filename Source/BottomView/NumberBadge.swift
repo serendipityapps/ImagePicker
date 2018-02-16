@@ -19,6 +19,31 @@ class NumberBadge: UIView {
 
 	var numberLabel: UILabel!
 
+	func updateCount(count: Int, animated: Bool) {
+		if badgeValue == 0 {
+			if count > 0 {
+				self.numberLabel.text = "\(count)"
+				if animated {
+					UIView.animate(withDuration: 0.2) {
+						self.alpha = 1
+					}
+				} else {
+					self.alpha = 1
+				}
+			}
+		} else {
+			if count == 0 {
+				if animated {
+					UIView.animate(withDuration: 0.2) {
+						self.alpha = 0
+					}
+				} else {
+					self.alpha = 0
+				}
+			}
+		}
+	}
+
 	var badgeValue: Int = 0 {
 		didSet {
 			overrideBadgeWithString = self.numberFormatter.string(from: NSNumber(value: Int32(badgeValue)))

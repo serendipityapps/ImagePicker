@@ -133,7 +133,7 @@ extension ImageStackView {
 
     if let sender = notification.object as? ImageStack {
       renderViews(sender.assets)
-			imageCountBadge.badgeValue = sender.assets.count
+			imageCountBadge.updateCount(count: sender.assets.count, animated: true)
 			if let firstView = views.first {
 				numberBadgeYConstraint.constant = -firstView.bounds.size.height
 			}
@@ -145,7 +145,7 @@ extension ImageStackView {
   @objc func imageStackDidChangeContent(_ notification: Notification) {
     if let sender = notification.object as? ImageStack {
       renderViews(sender.assets)
-			imageCountBadge.badgeValue = sender.assets.count
+			imageCountBadge.updateCount(count: sender.assets.count, animated: true)
 			if let firstView = views.first {
 				numberBadgeYConstraint.constant = -firstView.bounds.size.height
 			}
