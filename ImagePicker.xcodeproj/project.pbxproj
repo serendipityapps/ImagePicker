@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		39D134101CAC4B4E00EA2ECE /* AssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D1340F1CAC4B4E00EA2ECE /* AssetManager.swift */; };
 		39E3C3311CAFD79200340DAD /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39E3C3301CAFD79200340DAD /* LocationManager.swift */; };
+		445160322037313700FA305A /* NumberBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 445160312037313700FA305A /* NumberBadge.swift */; };
 		44DCFA981FC8490A009D9FD3 /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44DCFA971FC8490A009D9FD3 /* OverlayView.swift */; };
 		44DCFA9A1FC84982009D9FD3 /* OverlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 44DCFA991FC84982009D9FD3 /* OverlayView.xib */; };
 		44DCFA9E1FC85C62009D9FD3 /* camera-viewport-guide.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 44DCFA9D1FC85C62009D9FD3 /* camera-viewport-guide.pdf */; };
@@ -53,6 +54,7 @@
 /* Begin PBXFileReference section */
 		39D1340F1CAC4B4E00EA2ECE /* AssetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetManager.swift; sourceTree = "<group>"; };
 		39E3C3301CAFD79200340DAD /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		445160312037313700FA305A /* NumberBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberBadge.swift; sourceTree = "<group>"; };
 		44DCFA971FC8490A009D9FD3 /* OverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayView.swift; sourceTree = "<group>"; };
 		44DCFA991FC84982009D9FD3 /* OverlayView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OverlayView.xib; sourceTree = "<group>"; };
 		44DCFA9D1FC85C62009D9FD3 /* camera-viewport-guide.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "camera-viewport-guide.pdf"; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 				D5DC59AE1C201CC4003BD79B /* ButtonPicker.swift */,
 				D5DC59AF1C201CC4003BD79B /* ImageStack.swift */,
 				D5DC59B01C201CC4003BD79B /* StackView.swift */,
+				445160312037313700FA305A /* NumberBadge.swift */,
 			);
 			path = BottomView;
 			sourceTree = "<group>";
@@ -375,6 +378,7 @@
 				DC197E3C1E94DA5600F2A7D1 /* VideoInfoView.swift in Sources */,
 				D5DC59CE1C201CC4003BD79B /* TopView.swift in Sources */,
 				D5DC59C41C201CC4003BD79B /* ImageStack.swift in Sources */,
+				445160322037313700FA305A /* NumberBadge.swift in Sources */,
 				39E3C3311CAFD79200340DAD /* LocationManager.swift in Sources */,
 				44DCFA981FC8490A009D9FD3 /* OverlayView.swift in Sources */,
 				D5DC59CB1C201CC4003BD79B /* ImageGalleryViewDataSource.swift in Sources */,

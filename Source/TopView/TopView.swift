@@ -50,6 +50,7 @@ open class TopView: UIView {
 		label.textAlignment = .center
 		label.lineBreakMode = .byTruncatingTail
 		label.numberOfLines = 0
+		label.translatesAutoresizingMaskIntoConstraints = false
 		return label
 	}()
 

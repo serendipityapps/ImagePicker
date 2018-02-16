@@ -32,7 +32,17 @@ class ImageStackView: UIView {
     return array
     }()
 
+	lazy var imageCountBadge: NumberBadge = {
+
+		let badge = NumberBadge(frame: CGRect.zero)
+		badge.badgeBackgroundColor = self.configuration.numberBadgeBackgroundColor
+		badge.badgeFont = self.configuration.numberBadgeFont
+		badge.badgeTextColor = self.configuration.numberBadgeTextColor
+		return badge
+	}()
+
   // MARK: - Initializers
+
 
 	required init(frame: CGRect, configuration: Configuration = Configuration()) {
 		self.configuration = configuration
@@ -41,6 +51,11 @@ class ImageStackView: UIView {
     subscribe()
 
     views.forEach { addSubview($0) }
+
+		addSubview(imageCountBadge)
+		addConstraint(NSLayoutConstraint(item: imageCountBadge, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1.0, constant: 0))
+		addConstraint(NSLayoutConstraint(item: imageCountBadge, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1.0, constant: 0))
+
     addSubview(activityView)
     views.first?.alpha = 1
   }
@@ -112,13 +127,16 @@ extension ImageStackView {
 
     if let sender = notification.object as? ImageStack {
       renderViews(sender.assets)
+			imageCountBadge.badgeValue = sender.assets.count
       activityView.stopAnimating()
     }
+
   }
 
   @objc func imageStackDidChangeContent(_ notification: Notification) {
     if let sender = notification.object as? ImageStack {
       renderViews(sender.assets)
+			imageCountBadge.badgeValue = sender.assets.count
       activityView.stopAnimating()
     }
   }

@@ -28,6 +28,8 @@ open class Configuration {
 	public var doneButtonHighlightBackgroundColor = UIColor.gray
 	public var infoLabelTextColor = UIColor.white
 	public var infoLabelShadowTextColor = UIColor.darkGray
+	public var numberBadgeBackgroundColor = UIColor.red
+	public var numberBadgeTextColor = UIColor.white
 
   // MARK: Fonts
 
@@ -38,6 +40,7 @@ open class Configuration {
   public var noCameraFont = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.medium)
   public var settingsFont = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.medium)
 	public var infoTextLabelFont = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
+	public var numberBadgeFont = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.medium)
 
   // MARK: Titles
 
