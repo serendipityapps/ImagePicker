@@ -134,11 +134,11 @@ class NumberBadge: UIView {
 			var newSize = size
 			newSize.width += 8.0
 
-			if newSize.width < 20 {
-				newSize.width = 20
+			if newSize.width < 22 {
+				newSize.width = 22
 			}
-			if newSize.height < 20 {
-				newSize.height = 20
+			if newSize.height < 22 {
+				newSize.height = 22
 			}
 			return newSize
 	}
