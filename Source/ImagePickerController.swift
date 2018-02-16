@@ -71,12 +71,16 @@ open class ImagePickerController: UIViewController {
 	public func hideInfoMessage(animated: Bool) {
 
 		if animated {
-			UIView.animate(withDuration: 0.2, animations: {
+			UIView.animate(withDuration: 0.3, animations: {
 				self.topView.infoLabel.alpha = 0
-				self.topView.flashButton.titleLabel?.alpha = 1
 			}) { (success) in
 
 			}
+			UIView.animate(withDuration: 0.3, delay: 0.3, options: .beginFromCurrentState, animations: {
+				self.topView.flashButton.titleLabel?.alpha = 1
+			}, completion: { (finished) in
+
+			})
 		} else {
 			self.topView.infoLabel.alpha = 0
 			self.topView.flashButton.titleLabel?.alpha = 1
