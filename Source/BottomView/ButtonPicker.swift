@@ -45,6 +45,8 @@ class ButtonPicker: UIButton {
   func configure() {
     addSubview(numberLabel)
 
+		numberLabel.alpha = 0
+
     subscribe()
     setupButton()
     setupConstraints()

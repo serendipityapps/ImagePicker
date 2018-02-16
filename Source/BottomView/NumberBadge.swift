@@ -79,7 +79,7 @@ class NumberBadge: UIView {
 		}
 	}
 
-	fileprivate let defaultTextSize : CGFloat = 11
+	fileprivate let defaultTextSize : CGFloat = 13
 
 	fileprivate var numberFormatter : NumberFormatter!
 
@@ -134,8 +134,11 @@ class NumberBadge: UIView {
 			var newSize = size
 			newSize.width += 8.0
 
-			if newSize.height < 16 {
-				newSize.height = 16
+			if newSize.width < 20 {
+				newSize.width = 20
+			}
+			if newSize.height < 20 {
+				newSize.height = 20
 			}
 			return newSize
 	}
