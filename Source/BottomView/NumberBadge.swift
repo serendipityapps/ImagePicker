@@ -11,12 +11,6 @@ import UIKit
 
 class NumberBadge: UIView {
 
-	var forceHidden = false {
-		didSet {
-			setOwnState()
-		}
-	}
-
 	var numberLabel: UILabel!
 
 	func updateCount(count: Int, animated: Bool) {
@@ -47,52 +41,28 @@ class NumberBadge: UIView {
 						self.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
 						self.alpha = 0
 					}) { (success) in
-						self.numberLabel.text = "\(count)"
 						self.badgeValue = count
+						self.numberLabel.text = ""
 						self.numberLabel.invalidateIntrinsicContentSize()
+						self.layoutIfNeeded()
 					}
 				} else {
 					self.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
 					self.alpha = 0
-					self.numberLabel.text = "\(count)"
 					badgeValue = count
+					self.numberLabel.text = ""
 					numberLabel.invalidateIntrinsicContentSize()
+					self.layoutIfNeeded()
 				}
 			} else {
-				self.numberLabel.text = "\(count)"
 				self.badgeValue = count
+				self.numberLabel.text = "\(count)"
+				numberLabel.invalidateIntrinsicContentSize()
+				self.layoutIfNeeded()
 			}
 		}
 	}
-	var badgeValue: Int = 0 {
-		didSet {
-			overrideBadgeWithString = self.numberFormatter.string(from: NSNumber(value: Int32(badgeValue)))
-		}
-	}
-
-	var overrideBadgeWithString: String? {
-		didSet {
-			if let overrideString = overrideBadgeWithString {
-				numberLabel.text = overrideString
-			} else {
-				numberLabel.text = ""
-			}
-			setOwnState()
-		}
-	}
-
-	func setOwnState() {
-
-		if (((self.numberLabel.text?.characters.count)! > 0 && self.numberLabel.text != "0") && !self.forceHidden) == true {
-			self.alpha = 1
-		} else {
-				self.alpha = 0
-		}
-
-		numberLabel.invalidateIntrinsicContentSize()
-		self.invalidateIntrinsicContentSize()
-		self.layoutIfNeeded()
-	}
+	var badgeValue: Int = 0
 
 	var badgeTextColor : UIColor? {
 		didSet {
@@ -126,14 +96,8 @@ class NumberBadge: UIView {
 
 	fileprivate let defaultTextSize : CGFloat = 13
 
-	fileprivate var numberFormatter : NumberFormatter!
-
 	override init(frame: CGRect) {
 		super.init(frame: frame)
-
-		self.numberFormatter = NumberFormatter()
-		self.numberFormatter.groupingSeparator = ","
-		self.numberFormatter.usesGroupingSeparator = true
 
 		self.setup()
 	}
@@ -174,18 +138,18 @@ class NumberBadge: UIView {
 
 	override var intrinsicContentSize : CGSize {
 
-			let size = numberLabel.intrinsicContentSize
+		let size = numberLabel.intrinsicContentSize
 
-			var newSize = size
-			newSize.width += 8.0
+		var newSize = size
+		newSize.width += 10.0
 
-			if newSize.width < 22 {
-				newSize.width = 22
-			}
-			if newSize.height < 22 {
-				newSize.height = 22
-			}
-			return newSize
+		if newSize.width < 22 {
+			newSize.width = 22
+		}
+		if newSize.height < 22 {
+			newSize.height = 22
+		}
+		return newSize
 	}
 
 	override func layoutSubviews() {
