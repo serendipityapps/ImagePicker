@@ -156,7 +156,7 @@ open class ImageGalleryView: UIView, PHPhotoLibraryChangeObserver {
 			if fetchResult.count == 0 {
 				strongSelf.updateNoImagesLabel()
 			} else {
-				UIView.animate(withDuration: 0.25, delay: 0.0, options: UIViewAnimationOptions(), animations: {
+				UIView.animate(withDuration: 0.4, delay: 0.7, options: [.beginFromCurrentState], animations: {
 					strongSelf.collectionView.alpha = 1
 					strongSelf.updateNoImagesLabel()
 				}, completion: { (_) in
