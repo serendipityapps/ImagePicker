@@ -169,8 +169,8 @@ public class CameraView: UIViewController, CLLocationManagerDelegate, CameraManD
 	override public func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
 
-    previewLayer?.connection?.videoOrientation = .portrait
-  }
+    updateVideoLayer()
+	}
 
 	override public func viewDidDisappear(_ animated: Bool) {
     super.viewDidDisappear(animated)
@@ -206,7 +206,50 @@ public class CameraView: UIViewController, CLLocationManagerDelegate, CameraManD
     blurView.frame = view.bounds
     containerView.frame = view.bounds
     capturedImageView.frame = view.bounds
+
+		updateVideoLayer()
   }
+
+	private func updatePreviewLayer(layer: AVCaptureConnection, orientation: AVCaptureVideoOrientation) {
+		layer.videoOrientation = orientation
+		previewLayer?.frame = self.view.bounds
+	}
+
+	private func updateVideoLayer() {
+
+		if let previewLayerConnection =  self.previewLayer?.connection  {
+			updatePreviewLayer(layer: previewLayerConnection, orientation: currentConnectionOrientationForDevice(connection: previewLayerConnection))
+		}
+	}
+
+	fileprivate func currentConnectionOrientationForDevice(connection: AVCaptureConnection) -> AVCaptureVideoOrientation {
+
+		let orientation: UIDeviceOrientation = UIDevice.current.orientation
+
+		if (connection.isVideoOrientationSupported) {
+			switch (orientation) {
+			case .portrait:
+				return .portrait
+			case .landscapeRight:
+				return .landscapeLeft
+			case .landscapeLeft:
+				return .landscapeRight
+			case .portraitUpsideDown:
+				return .portraitUpsideDown
+			default:
+				return .portrait
+			}
+		} else {
+			return .portrait
+		}
+	}
+
+	public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+		super.viewWillTransition(to: size, with: coordinator)
+
+		updateVideoLayer()
+	}
+
 
   // MARK: - Actions
 
@@ -259,9 +302,11 @@ public class CameraView: UIViewController, CLLocationManagerDelegate, CameraManD
 		if configuration.cameraHasOverlay {
 			cropRect = previewLayer.convert(overlayView.viewPortContainerView.frame, from: overlayView.layer)
 		}
-		cameraMan.takePhoto(previewLayer, location: locationManager?.latestLocation, cropRect: cropRect) {
-      completion()
-    }
+		if let previewLayerConnection =  previewLayer.connection {
+			cameraMan.takePhoto(previewLayer, videoOrientation: currentConnectionOrientationForDevice(connection: previewLayerConnection), location: locationManager?.latestLocation, cropRect: cropRect) {
+				completion()
+			}
+		}
   }
 
   // MARK: - Timer methods
@@ -354,7 +399,7 @@ public class CameraView: UIViewController, CLLocationManagerDelegate, CameraManD
 		}
 		locationManager?.startUpdatingLocation()
     setupPreviewLayer()
-		previewLayer?.connection?.videoOrientation = .portrait
+		updateVideoLayer()
   }
 
 	func cameraManDidStop(_ cameraMan: CameraMan) {

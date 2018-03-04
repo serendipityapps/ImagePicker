@@ -167,13 +167,12 @@ class CameraMan {
     }
   }
 
-	func takePhoto(_ previewLayer: AVCaptureVideoPreviewLayer, location: CLLocation?, cropRect: CGRect?, completion: (() -> Void)? = nil) {
-    guard let connection = stillImageOutput?.connection(with: AVMediaType.video) else {
+    func takePhoto(_ previewLayer: AVCaptureVideoPreviewLayer, videoOrientation: AVCaptureVideoOrientation, location: CLLocation?, cropRect: CGRect?, completion: (() -> Void)? = nil) {    guard let connection = stillImageOutput?.connection(with: AVMediaType.video) else {
 			completion?()
 			return
 		}
 
-    connection.videoOrientation = Helper.videoOrientation()
+        connection.videoOrientation = videoOrientation
 
     queue.async {
       self.stillImageOutput?.captureStillImageAsynchronously(from: connection) { buffer, error in
@@ -186,6 +185,73 @@ class CameraMan {
             }
             return
         }
+
+				func fixImageOrientation(image: UIImage) -> UIImage? {
+
+					guard image.imageOrientation != .up else {
+						return image
+					}
+
+					var transform = CGAffineTransform.identity
+
+					switch image.imageOrientation {
+
+					case .down, .downMirrored:
+
+						transform = transform.translatedBy(x: image.size.width, y: image.size.height)
+						transform = transform.rotated(by: CGFloat.pi)
+
+					case .left, .leftMirrored:
+
+						transform = transform.translatedBy(x: image.size.width, y: 0)
+						transform = transform.rotated(by: CGFloat.pi / 2)
+
+					case .right, .rightMirrored:
+
+						transform = transform.translatedBy(x: 0, y: image.size.height)
+						transform = transform.rotated(by: -(CGFloat.pi / 2))
+
+					default:
+						break
+					}
+
+					switch image.imageOrientation {
+
+					case .upMirrored, .downMirrored:
+
+						transform.translatedBy(x: image.size.width, y: 0)
+						transform.scaledBy(x: -1, y: 1)
+
+					case .leftMirrored, .rightMirrored:
+
+						transform.translatedBy(x: image.size.height, y: 0)
+						transform.scaledBy(x: -1, y: 1)
+
+					default:
+						break
+					}
+
+					guard let cgImage = image.cgImage else {
+						return nil
+					}
+
+					let ctx: CGContext = CGContext(data: nil, width: Int(image.size.width), height: Int(image.size.height), bitsPerComponent: cgImage.bitsPerComponent, bytesPerRow: 0, space: cgImage.colorSpace!, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
+
+					ctx.concatenate(transform)
+
+					switch image.imageOrientation {
+					case .left, .leftMirrored, .right, .rightMirrored:
+						ctx.draw(cgImage, in: CGRect(x: 0, y: 0, width: image.size.height, height: image.size.width))
+					default:
+						ctx.draw(cgImage, in: CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
+					}
+
+					guard let newCGImage = ctx.makeImage() else {
+						return nil
+					}
+
+					return UIImage(cgImage: newCGImage)
+				}
 
 				if let cropRect = cropRect {
 					
@@ -203,12 +269,20 @@ class CameraMan {
 					if let visualCgImage = image.cgImage?.cropping(to: visualCropRect) {
 						let visualImage = UIImage(cgImage: visualCgImage, scale: 1.0, orientation: image.imageOrientation)
 						
-						self.savePhoto(visualImage, location: location, completion: completion)
+						if let fixedForOrientation = fixImageOrientation(image: visualImage) {
+							self.savePhoto(fixedForOrientation, location: location, completion: completion)
+						} else {
+							fatalError("oops")
+						}
 					} else {
 						fatalError("oops")
 					}
 				} else {
-					self.savePhoto(image, location: location, completion: completion)
+					if let fixedForOrientation = fixImageOrientation(image: image) {
+						self.savePhoto(fixedForOrientation, location: location, completion: completion)
+					} else {
+						fatalError("oops")
+					}
 				}
       }
     }
