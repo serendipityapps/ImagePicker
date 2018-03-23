@@ -122,7 +122,7 @@ open class Configuration {
 			return cell
 		}
 
-		AssetManager.resolveAsset(asset, size: CGSize(width: 160, height: 240)) { image in
+		AssetManager.resolveAsset(asset, size: CGSize(width: 160, height: 240)) { (image, localIdentifier) in
 			if let image = image {
 				cell.configureCell(image.image)
 				
@@ -174,7 +174,7 @@ open class Configuration {
 			return
 		}
 		
-		AssetManager.resolveAsset(asset, size: CGSize(width: 100, height: 100)) { image in
+		AssetManager.resolveAsset(asset, size: CGSize(width: 100, height: 100)) { (image, localIdentifier) in
 			guard image != nil else { return }
 			
 			if cell.selectedImageView.image != nil {

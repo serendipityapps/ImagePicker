@@ -159,8 +159,8 @@ open class ImageGalleryView: UIView, PHPhotoLibraryChangeObserver {
 				UIView.animate(withDuration: 0.4, delay: 0.7, options: [.beginFromCurrentState], animations: {
 					strongSelf.collectionView.alpha = 1
 					strongSelf.updateNoImagesLabel()
-				}, completion: { (_) in
-
+				}, completion: { [weak self] (_) in
+						self?.collectionView.reloadData()
 				})
 			}
 
@@ -192,37 +192,37 @@ open class ImageGalleryView: UIView, PHPhotoLibraryChangeObserver {
 			return
 		}
 
-		DispatchQueue.main.sync {
+		DispatchQueue.main.async { [weak self] in
 			// Check for changes to the list of assets (insertions, deletions, moves, or updates).
 			if let changes = changeInstance.changeDetails(for: fetchResult) {
 				// Keep the new fetch result for future use.
-				self.fetchResult = changes.fetchResultAfterChanges
+				self?.fetchResult = changes.fetchResultAfterChanges
 				if changes.hasIncrementalChanges {
 					// If there are incremental diffs, animate them in the collection view.
-					collectionView.performBatchUpdates({
+					self?.collectionView.performBatchUpdates({ [weak self] in
 						// For indexes to make sense, updates must be in this order:
 						// delete, insert, reload, move
 						if let removed = changes.removedIndexes, removed.count > 0 {
-							collectionView.deleteItems(at: removed.map { IndexPath(item: $0, section:0) })
+							self?.collectionView.deleteItems(at: removed.map { IndexPath(item: $0, section:0) })
 						}
 						if let inserted = changes.insertedIndexes, inserted.count > 0 {
-							collectionView.insertItems(at: inserted.map { IndexPath(item: $0, section:0) })
+							self?.collectionView.insertItems(at: inserted.map { IndexPath(item: $0, section:0) })
 						}
 						if let changed = changes.changedIndexes, changed.count > 0 {
-							collectionView.reloadItems(at: changed.map { IndexPath(item: $0, section:0) })
+							self?.collectionView.reloadItems(at: changed.map { IndexPath(item: $0, section:0) })
 						}
 						changes.enumerateMoves { fromIndex, toIndex in
-							self.collectionView.moveItem(at: IndexPath(item: fromIndex, section: 0),
+							self?.collectionView.moveItem(at: IndexPath(item: fromIndex, section: 0),
 																					 to: IndexPath(item: toIndex, section: 0))
 						}
 					})
 				} else {
 					// Reload the collection view if incremental diffs are not available.
-					collectionView.reloadData()
+					self?.collectionView.reloadData()
 				}
 
-				imageGalleryUpdateDelegate?.imageGalleryDidUpdate(changes)
-				checkIfNoImagesLabelShouldBeDisplayed()
+				self?.imageGalleryUpdateDelegate?.imageGalleryDidUpdate(changes)
+				self?.checkIfNoImagesLabelShouldBeDisplayed()
 			}
 		}
 	}

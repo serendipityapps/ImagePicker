@@ -168,8 +168,8 @@ extension ImageStackView {
 
     for (index, view) in views.enumerated() {
       if index <= photos.count - 1 {
-        AssetManager.resolveAsset(photos[index], size: configuration.stackViewImageSize) { image in
-          view.image = image?.image
+        AssetManager.resolveAsset(photos[index], size: configuration.stackViewImageSize) { (image, localIdentifier) in
+					view.image = image?.image
         }
         view.alpha = 1
       } else {
