@@ -42,7 +42,6 @@ open class AssetManager {
 
 		let localIdentifier = asset.localIdentifier
     imageManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: requestOptions) { image, info in
-      if let info = info, info["PHImageFileUTIKey"] == nil {
         DispatchQueue.main.async(execute: {
 					if let image = image {
 						let imagePickerImage = ImagePickerImage(image: image, location: location)
@@ -51,7 +50,6 @@ open class AssetManager {
 						completion(nil, localIdentifier)
 					}
         })
-      }
     }
   }
 
