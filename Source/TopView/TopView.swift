@@ -114,11 +114,11 @@ open class TopView: UIView {
 		let mode: AVCaptureDevice.FlashMode
 		switch currentFlashIndex {
 		case 0:
-			mode = .auto
+			mode = .off
 		case 1:
 			mode = .on
 		case 2:
-			mode = .off
+			mode = .auto
 		default:
 			mode = .auto
 		}

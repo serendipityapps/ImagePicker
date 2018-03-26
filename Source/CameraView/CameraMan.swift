@@ -117,16 +117,22 @@ class CameraMan {
       }
     }
 
-		let currentFlashIndex = UserDefaults.standard.integer(forKey: "com.app.ImagePickerCameraFlashMode")
+		let currentFlashIndex: Int
+		if UserDefaults.standard.object(forKey: "com.app.ImagePickerCameraFlashMode") == nil {
+			currentFlashIndex = 2
+			UserDefaults.standard.set(2, forKey: "com.app.ImagePickerCameraFlashMode")
+		} else {
+			currentFlashIndex = UserDefaults.standard.integer(forKey: "com.app.ImagePickerCameraFlashMode")
+		}
 
 		let mode: AVCaptureDevice.FlashMode
 		switch currentFlashIndex {
 		case 0:
-			mode = .auto
+			mode = .off
 		case 1:
 			mode = .on
 		case 2:
-			mode = .off
+			mode = .auto
 		default:
 			mode = .auto
 		}
