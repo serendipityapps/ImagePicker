@@ -275,13 +275,8 @@ public class CameraView: UIViewController, CLLocationManagerDelegate, CameraManD
     })
   }
 
-  func flashCamera(_ title: String) {
-    let mapping: [String: AVCaptureDevice.FlashMode] = [
-      self.configuration.flashButtonTitleON: .on,
-      self.configuration.flashButtonTitleOFF: .off
-    ]
-
-    cameraMan.flash(mapping[title] ?? .auto)
+  func flashCamera(_ mode: AVCaptureDevice.FlashMode) {
+    cameraMan.flash(mode)
   }
 
   func takePicture(_ completion: @escaping () -> Void) {

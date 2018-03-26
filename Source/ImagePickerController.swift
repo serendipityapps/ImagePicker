@@ -475,8 +475,8 @@ extension ImagePickerController: CameraViewDelegate {
 
 extension ImagePickerController: TopViewDelegate {
 
-  func flashButtonDidPress(_ title: String) {
-    cameraController.flashCamera(title)
+  func flashDidChange(_ mode: AVCaptureDevice.FlashMode) {
+    cameraController.flashCamera(mode)
   }
 
   func rotateDeviceDidPress() {

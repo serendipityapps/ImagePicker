@@ -117,7 +117,20 @@ class CameraMan {
       }
     }
 
-		flash(.auto)
+		let currentFlashIndex = UserDefaults.standard.integer(forKey: "com.app.ImagePickerCameraFlashMode")
+
+		let mode: AVCaptureDevice.FlashMode
+		switch currentFlashIndex {
+		case 0:
+			mode = .auto
+		case 1:
+			mode = .on
+		case 2:
+			mode = .off
+		default:
+			mode = .auto
+		}
+		flash(mode)
   }
 
   func stop() {

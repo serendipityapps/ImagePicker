@@ -1,8 +1,9 @@
 import UIKit
+import AVFoundation
 
 protocol TopViewDelegate: class {
 
-  func flashButtonDidPress(_ title: String)
+  func flashDidChange(_ mode: AVCaptureDevice.FlashMode)
   func rotateDeviceDidPress()
 }
 
@@ -106,32 +107,50 @@ open class TopView: UIView {
 
   @objc func flashButtonDidPress(_ button: UIButton) {
     currentFlashIndex += 1
-    currentFlashIndex = currentFlashIndex % flashButtonTitles.count
-
-    switch currentFlashIndex {
-    case 1:
-      button.setTitleColor(UIColor(red: 0.98, green: 0.98, blue: 0.45, alpha: 1), for: UIControlState())
-      button.setTitleColor(UIColor(red: 0.52, green: 0.52, blue: 0.24, alpha: 1), for: .highlighted)
-    default:
-      button.setTitleColor(UIColor.white, for: UIControlState())
-      button.setTitleColor(UIColor.white, for: .highlighted)
-    }
-
-    let newTitle = flashButtonTitles[currentFlashIndex]
-
-		switch newTitle {
-		case self.configuration.flashButtonTitleAUTO:
-			button.setImage(self.configuration.flashButtonImageAUTO, for: UIControlState())
-		case self.configuration.flashButtonTitleON:
-			button.setImage(self.configuration.flashButtonImageON, for: UIControlState())
-		case self.configuration.flashButtonTitleOFF:
-			button.setImage(self.configuration.flashButtonImageOFF, for: UIControlState())
-		default:
-			break
+		if currentFlashIndex > 2 {
+			currentFlashIndex = 0
 		}
-    button.setTitle(newTitle, for: UIControlState())
-    delegate?.flashButtonDidPress(newTitle)
+
+		let mode: AVCaptureDevice.FlashMode
+		switch currentFlashIndex {
+		case 0:
+			mode = .auto
+		case 1:
+			mode = .on
+		case 2:
+			mode = .off
+		default:
+			mode = .auto
+		}
+
+		setFlashState(mode: mode)
+		UserDefaults.standard.set(mode.rawValue, forKey: "com.app.ImagePickerCameraFlashMode")
+
+    delegate?.flashDidChange(mode)
   }
+
+	private func setFlashState(mode: AVCaptureDevice.FlashMode) {
+
+		switch mode {
+		case .auto:
+			flashButton.setTitleColor(UIColor.white, for: UIControlState())
+			flashButton.setTitleColor(UIColor.white, for: .highlighted)
+			flashButton.setImage(self.configuration.flashButtonImageAUTO, for: UIControlState())
+			flashButton.setTitle(self.configuration.flashButtonTitleAUTO, for: UIControlState())
+
+		case .on:
+			flashButton.setTitleColor(UIColor(red: 0.98, green: 0.98, blue: 0.45, alpha: 1), for: UIControlState())
+			flashButton.setTitleColor(UIColor(red: 0.52, green: 0.52, blue: 0.24, alpha: 1), for: .highlighted)
+			flashButton.setImage(self.configuration.flashButtonImageON, for: UIControlState())
+			flashButton.setTitle(self.configuration.flashButtonTitleON, for: UIControlState())
+
+		case .off:
+			flashButton.setTitleColor(UIColor.white, for: UIControlState())
+			flashButton.setTitleColor(UIColor.white, for: .highlighted)
+			flashButton.setImage(self.configuration.flashButtonImageOFF, for: UIControlState())
+			flashButton.setTitle(self.configuration.flashButtonTitleOFF, for: UIControlState())
+		}
+	}
 
   @objc func rotateCameraButtonDidPress(_ button: UIButton) {
     delegate?.rotateDeviceDidPress()
