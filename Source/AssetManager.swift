@@ -32,25 +32,32 @@ open class AssetManager {
 			}
   }
 
-    open static func resolveAsset(_ asset: PHAsset, size: CGSize = CGSize(width: 720, height: 1280), resizeMode: PHImageRequestOptionsResizeMode = .fast, completion: @escaping (_ image: ImagePickerImage?, _ assetLocalIdentifier: String) -> Void) {    let imageManager = PHImageManager.default()
-    let requestOptions = PHImageRequestOptions()
-    requestOptions.deliveryMode = .highQualityFormat
-    requestOptions.isNetworkAccessAllowed = true
-		requestOptions.resizeMode = resizeMode
+    open static func resolveAsset(_ asset: PHAsset, size: CGSize = CGSize(width: 720, height: 1280), resizeMode: PHImageRequestOptionsResizeMode = .fast, completion: @escaping (_ image: ImagePickerImage?, _ assetLocalIdentifier: String) -> Void) {
 
-		let location = asset.location
+			DispatchQueue.global(qos: .userInteractive).async {
+				let imageManager = PHImageManager.default()
+				let requestOptions = PHImageRequestOptions()
+				requestOptions.deliveryMode = .highQualityFormat
+				requestOptions.isNetworkAccessAllowed = true
+				requestOptions.resizeMode = resizeMode
+				requestOptions.version = .current
+				requestOptions.isSynchronous = true
 
-		let localIdentifier = asset.localIdentifier
-    imageManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: requestOptions) { image, info in
-        DispatchQueue.main.async(execute: {
-					if let image = image {
-						let imagePickerImage = ImagePickerImage(image: image, location: location)
-          	completion(imagePickerImage, localIdentifier)
-					} else {
-						completion(nil, localIdentifier)
-					}
-        })
-    }
+				let location = asset.location
+				let localIdentifier = asset.localIdentifier
+
+				imageManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: requestOptions) { image, info in
+					DispatchQueue.main.async(execute: {
+
+						if let image = image {
+							let imagePickerImage = ImagePickerImage(image: image, location: location)
+							completion(imagePickerImage, localIdentifier)
+						} else {
+							completion(nil, localIdentifier)
+						}
+					})
+				}
+			}
   }
 
   open static func resolveAssets(_ assets: [PHAsset], size: CGSize = CGSize(width: 720, height: 1280), resizeMode: PHImageRequestOptionsResizeMode = .fast) -> [ImagePickerImage] {
