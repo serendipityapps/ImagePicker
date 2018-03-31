@@ -145,7 +145,7 @@ open class ImageGalleryView: UIView, PHPhotoLibraryChangeObserver {
 
 	func fetchPhotos(_ completion: (() -> Void)? = nil) {
 
-		AssetManager.fetch(withConfiguration: configuration) { [weak self] (fetchResult) in
+		AssetManager.fetch(allowVideoSelection: configuration.allowVideoSelection) { [weak self] (fetchResult) in
 
 			guard let strongSelf = self, let fetchResult = fetchResult else { return }
 

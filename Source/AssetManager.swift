@@ -15,7 +15,7 @@ open class AssetManager {
     return UIImage(named: name, in: bundle, compatibleWith: traitCollection) ?? UIImage()
   }
 
-    open static func fetch(withConfiguration configuration: Configuration, _ completion: @escaping (_ fetchResult: PHFetchResult<PHAsset>?) -> Void) {    guard PHPhotoLibrary.authorizationStatus() == .authorized else { return }
+    open static func fetch(allowVideoSelection: Bool, _ completion: @escaping (_ fetchResult: PHFetchResult<PHAsset>?) -> Void) {    guard PHPhotoLibrary.authorizationStatus() == .authorized else { return }
 
 			DispatchQueue.global(qos: .background).async {
 
@@ -24,7 +24,7 @@ open class AssetManager {
 				fetchOptions.sortDescriptors = [sort]
 				fetchOptions.includeAssetSourceTypes = [.typeUserLibrary]
 
-				let fetchResult = configuration.allowVideoSelection ? PHAsset.fetchAssets(with: fetchOptions) : PHAsset.fetchAssets(with: .image, options: fetchOptions)
+				let fetchResult = allowVideoSelection ? PHAsset.fetchAssets(with: fetchOptions) : PHAsset.fetchAssets(with: .image, options: fetchOptions)
 
 				DispatchQueue.main.async {
 					completion(fetchResult)
