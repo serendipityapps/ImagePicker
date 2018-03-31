@@ -151,16 +151,16 @@ open class ImageGalleryView: UIView, PHPhotoLibraryChangeObserver {
 
 			strongSelf.fetchResult = fetchResult
 
-			strongSelf.collectionView.reloadData()
-
 			if fetchResult.count == 0 {
+				strongSelf.collectionView.reloadData()
 				strongSelf.updateNoImagesLabel()
 			} else {
-				UIView.animate(withDuration: 0.4, delay: 0.7, options: [.beginFromCurrentState], animations: {
-					strongSelf.collectionView.alpha = 1
-					strongSelf.updateNoImagesLabel()
-				}, completion: { [weak self] (_) in
-						self?.collectionView.reloadData()
+				DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.milliseconds(400), execute: { [weak self] in
+					self?.collectionView.reloadData()
+					UIView.animate(withDuration: 0.3, animations: {
+						strongSelf.collectionView.alpha = 1
+						strongSelf.updateNoImagesLabel()
+					})
 				})
 			}
 

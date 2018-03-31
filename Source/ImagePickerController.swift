@@ -205,7 +205,7 @@ open class ImagePickerController: UIViewController {
 
 		})
 
-		UIView.animate(withDuration: 0.25, delay: 0.3, options: UIViewAnimationOptions(), animations: {
+		UIView.animate(withDuration: 0.3, delay: 0.0, options: UIViewAnimationOptions(), animations: {
 			self.topView.alpha = 1
 			self.cameraController.overlayView.alpha = 1
 		}, completion: { (_) in
