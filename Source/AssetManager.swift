@@ -78,4 +78,53 @@ open class AssetManager {
     }
     return images
   }
+
+	open static func resolveAssets(_ assets: [PHAsset], imagesClosers: @escaping ([ImagePickerImage])->()) {
+
+		let imageManager = PHImageManager.default()
+		   let requestOptions = PHImageRequestOptions()
+		   requestOptions.isSynchronous = true
+
+		   var imagesData = [ImagePickerImage]()
+
+		   if !assets.isEmpty {
+				for asset in assets {
+						let options = PHContentEditingInputRequestOptions()
+				     options.isNetworkAccessAllowed = true
+						asset.requestContentEditingInput(with: options) { (contentEditingInput: PHContentEditingInput?, _) -> Void in
+
+				        let optionsRequest = PHImageRequestOptions()
+								optionsRequest.version = .original
+								optionsRequest.isSynchronous = true
+
+				       if asset.location == nil {
+				           //Image without location and exif data (like screenshots)
+				            let targetSize = ImagePickerController.photoQuality == AVCaptureSession.Preset.photo ? PHImageManagerMaximumSize : CGSize(width: 720, height: 1280)
+				           imageManager.requestImage(for: asset, targetSize: targetSize, contentMode: .aspectFill, options: optionsRequest) { image, _ in
+				             if let image = image {
+			                imagesData.append((image, asset.location))
+				                if (imagesData.count == assets.count) {
+				                 imagesClosers(imagesData)
+				                }
+				              }
+				            }
+				         } else {
+				           ////Image with location and exif data
+				           imageManager.requestImageData(for: asset, options: optionsRequest, resultHandler: { (data, string, orientation, info) in
+				             if let data = data, let image = UIImage(data: data) {
+
+											let imagePickerImage = ImagePickerImage(image: image, location: contentEditingInput!.location)
+				               imagesData.append(imagePickerImage)
+				               if (imagesData.count == assets.count) {
+				                 imagesClosers(imagesData)
+				                }
+				              }
+				           })
+				         }
+				       }
+				     }
+		   } else {
+		     imagesClosers(imagesData)
+			    }
+		  }
 }

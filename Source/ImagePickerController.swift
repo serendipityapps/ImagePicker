@@ -18,6 +18,9 @@ import Photos
   func wrapperDidPress(_ imagePicker: ImagePickerController, images: [ImagePickerImage])
   func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [ImagePickerImage])
   func cancelButtonDidPress(_ imagePicker: ImagePickerController)
+
+	func cameraImagePickerDidReturn(_ imagePicker: ImagePickerController, images: [PHAsset])
+
 }
 
 open class ImagePickerController: UIViewController {
