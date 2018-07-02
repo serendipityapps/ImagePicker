@@ -19,7 +19,7 @@ import Photos
   func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [ImagePickerImage])
   func cancelButtonDidPress(_ imagePicker: ImagePickerController)
 
-	func cameraImagePickerDidReturn(_ imagePicker: ImagePickerController, images: [PHAsset])
+	func didStartImportingPHAssets(_ imagePicker: ImagePickerController)
 
 }
 
