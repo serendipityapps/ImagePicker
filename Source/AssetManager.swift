@@ -4,161 +4,58 @@ import Photos
 
 open class AssetManager {
 
-  open static func getImage(_ name: String) -> UIImage {
-    let traitCollection = UITraitCollection(displayScale: 3)
-    var bundle = Bundle(for: AssetManager.self)
+	open static func getImage(_ name: String) -> UIImage {
+		let traitCollection = UITraitCollection(displayScale: 3)
+		var bundle = Bundle(for: AssetManager.self)
 
-    if let resource = bundle.resourcePath, let resourceBundle = Bundle(path: resource + "/ImagePicker.bundle") {
-      bundle = resourceBundle
-    }
+		if let resource = bundle.resourcePath, let resourceBundle = Bundle(path: resource + "/ImagePicker.bundle") {
+		  bundle = resourceBundle
+		}
 
-    return UIImage(named: name, in: bundle, compatibleWith: traitCollection) ?? UIImage()
-  }
+		return UIImage(named: name, in: bundle, compatibleWith: traitCollection) ?? UIImage()
+	}
 
-    open static func fetch(allowVideoSelection: Bool, _ completion: @escaping (_ fetchResult: PHFetchResult<PHAsset>?) -> Void) {    guard PHPhotoLibrary.authorizationStatus() == .authorized else { return }
+	open static func fetch(allowVideoSelection: Bool, _ completion: @escaping (_ fetchResult: PHFetchResult<PHAsset>?) -> Void) {    guard PHPhotoLibrary.authorizationStatus() == .authorized else { return }
 
-			DispatchQueue.global(qos: .userInitiated).async {
+		DispatchQueue.global(qos: .userInitiated).async {
 
-				let fetchOptions = PHFetchOptions()
-				let sort = NSSortDescriptor(key: "creationDate", ascending: false)
-				fetchOptions.sortDescriptors = [sort]
-				fetchOptions.includeAssetSourceTypes = [.typeUserLibrary]
+			let fetchOptions = PHFetchOptions()
+			let sort = NSSortDescriptor(key: "creationDate", ascending: false)
+			fetchOptions.sortDescriptors = [sort]
+			fetchOptions.includeAssetSourceTypes = [.typeUserLibrary]
 
-				let fetchResult = allowVideoSelection ? PHAsset.fetchAssets(with: fetchOptions) : PHAsset.fetchAssets(with: .image, options: fetchOptions)
+			let fetchResult = allowVideoSelection ? PHAsset.fetchAssets(with: fetchOptions) : PHAsset.fetchAssets(with: .image, options: fetchOptions)
 
-				DispatchQueue.main.async {
-					completion(fetchResult)
-				}
+			DispatchQueue.main.async {
+				completion(fetchResult)
 			}
-  }
+		}
+	}
 
     open static func resolveAsset(_ asset: PHAsset, size: CGSize = CGSize(width: 720, height: 1280), resizeMode: PHImageRequestOptionsResizeMode = .fast, completion: @escaping (_ image: ImagePickerImage?, _ assetLocalIdentifier: String) -> Void) {
 
-			DispatchQueue.global(qos: .userInitiated).async {
-				let imageManager = PHImageManager.default()
-				let requestOptions = PHImageRequestOptions()
-				requestOptions.deliveryMode = .highQualityFormat
-				requestOptions.isNetworkAccessAllowed = true
-				requestOptions.resizeMode = resizeMode
-				requestOptions.version = .current
-				requestOptions.isSynchronous = true
+		DispatchQueue.global(qos: .userInitiated).async {
+			let imageManager = PHImageManager.default()
+			let requestOptions = PHImageRequestOptions()
+			requestOptions.deliveryMode = .highQualityFormat
+			requestOptions.isNetworkAccessAllowed = true
+			requestOptions.resizeMode = resizeMode
+			requestOptions.version = .current
+			requestOptions.isSynchronous = true
 
-				let location = asset.location
-				let localIdentifier = asset.localIdentifier
-
-				imageManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: requestOptions) { image, info in
-					DispatchQueue.main.async(execute: {
-
-						if let image = image {
-							let imagePickerImage = ImagePickerImage(image: image, location: location)
-							completion(imagePickerImage, localIdentifier)
-						} else {
-							completion(nil, localIdentifier)
-						}
-					})
-				}
-			}
-  }
-
-  open static func resolveAssets(_ assets: [PHAsset], size: CGSize = CGSize(width: 720, height: 1280), resizeMode: PHImageRequestOptionsResizeMode = .fast) -> [ImagePickerImage] {
-    let imageManager = PHImageManager.default()
-    let requestOptions = PHImageRequestOptions()
-    requestOptions.isSynchronous = true
-		requestOptions.resizeMode = resizeMode
-
-    var images = [ImagePickerImage]()
-    for asset in assets {
 			let location = asset.location
-      imageManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: requestOptions) { image, _ in
-        if let image = image {
-					let imagePickerImage = ImagePickerImage(image: image, location: location)
-          images.append(imagePickerImage)
-        }
-      }
-    }
-    return images
-  }
+			let localIdentifier = asset.localIdentifier
 
+			imageManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: requestOptions) { image, info in
+				DispatchQueue.main.async(execute: {
 
-	open static func resolveAssets(_ assets: [PHAsset], size: CGSize = CGSize(width: 720, height: 1280), resizeMode: PHImageRequestOptionsResizeMode = .fast, overallProgressHandler:((_ progress: Double) -> Void)?, completionHandler: @escaping ([ImagePickerImage])->()) {
-
-		guard assets.isEmpty == false else {
-			completionHandler([ImagePickerImage]())
-			return
-		}
-
-		DispatchQueue.global(qos: .userInitiated).async {
-
-			var imagesData = [ImagePickerImage]()
-
-			let dispatchGroup = DispatchGroup()
-
-			for asset in assets {
-
-			//	AssetManager.resolveAsset(asset, size: size, resizeMode: resizeMode,
-			}
-
-			dispatchGroup.notify(queue: .main, execute: {
-				completionHandler(imagesData)
-			})
-		}
-	}
-
-	public static func resolveAsset(_ asset: PHAsset, size: CGSize = CGSize(width: 720, height: 1280), resizeMode: PHImageRequestOptionsResizeMode = .fast, progressHandler: ((_ progress: Double) -> Void)?, completionHandler: @escaping (_ image: ImagePickerImage?, _ assetLocalIdentifier: String) -> Void) {
-
-		AssetManager.resolveAsset(asset, canDownloadOnNetwork: false, size: size, resizeMode: resizeMode, progressHandler: progressHandler, completionHandler: completionHandler)
-	}
-
-
-	private static func resolveAsset(_ asset: PHAsset, canDownloadOnNetwork: Bool = false, size: CGSize = CGSize(width: 720, height: 1280), resizeMode: PHImageRequestOptionsResizeMode = .fast, progressHandler: ((_ progress: Double) -> Void)?, completionHandler: @escaping (_ image: ImagePickerImage?, _ assetLocalIdentifier: String) -> Void) {
-
-		let localIdentifier = asset.localIdentifier
-
-		DispatchQueue.global(qos: .userInitiated).async {
-
-			let options = PHContentEditingInputRequestOptions()
-			options.isNetworkAccessAllowed = true
-
-			asset.requestContentEditingInput(with: options) { (contentEditingInput: PHContentEditingInput?, _) -> Void in
-
-				let requestOptions = PHImageRequestOptions()
-				requestOptions.deliveryMode = .highQualityFormat
-				requestOptions.resizeMode = resizeMode
-				requestOptions.version = .current
-				requestOptions.isSynchronous = true
-
-				if canDownloadOnNetwork {
-					requestOptions.isNetworkAccessAllowed = true
-					requestOptions.progressHandler = { (progress, error, stop, info) in
-						progressHandler?(progress)
+					if let image = image {
+						let imagePickerImage = ImagePickerImage(image: image, location: location)
+						completion(imagePickerImage, localIdentifier)
+					} else {
+						completion(nil, localIdentifier)
 					}
-				}
-
-				if asset.location == nil {
-					//Image without location and exif data (like screenshots)
-					PHImageManager.default().requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: requestOptions) { (image, info) in
-						if let image = image {
-							let imagePickerImage = ImagePickerImage(image: image, location: asset.location)
-							completionHandler(imagePickerImage, localIdentifier)
-						} else if let isInCloud = info?[PHImageResultIsInCloudKey] as AnyObject?, isInCloud.boolValue && !requestOptions.isNetworkAccessAllowed {
-							AssetManager.resolveAsset(asset, canDownloadOnNetwork: true, progressHandler: progressHandler, completionHandler: completionHandler)
-						} else { // not available at allat the moment
-							completionHandler(nil, localIdentifier)
-						}
-					}
-				} else {
-					////Image with location and exif data
-					PHImageManager.default().requestImageData(for: asset, options: requestOptions, resultHandler: { (data, string, orientation, info) in
-						if let data = data, let image = UIImage(data: data) {
-							let imagePickerImage = ImagePickerImage(image: image, location: contentEditingInput!.location)
-							completionHandler(imagePickerImage, localIdentifier)
-						} else if let isInCloud = info?[PHImageResultIsInCloudKey] as AnyObject?, isInCloud.boolValue && !requestOptions.isNetworkAccessAllowed {
-							AssetManager.resolveAsset(asset, canDownloadOnNetwork: true, progressHandler: progressHandler, completionHandler: completionHandler)
-						} else { // not available at allat the moment
-							completionHandler(nil, localIdentifier)
-						}
-					})
-				}
+				})
 			}
 		}
 	}

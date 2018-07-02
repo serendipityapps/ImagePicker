@@ -15,11 +15,9 @@ import Photos
 
 @objc public protocol ImagePickerDelegate: class {
 
-  func wrapperDidPress(_ imagePicker: ImagePickerController, images: [ImagePickerImage])
-  func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [ImagePickerImage])
+  func selectedStackDidPress(_ imagePicker: ImagePickerController, images: [PHAsset])
+  func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [PHAsset])
   func cancelButtonDidPress(_ imagePicker: ImagePickerController)
-
-	func didStartImportingPHAssets(_ imagePicker: ImagePickerController)
 
 }
 
@@ -414,15 +412,8 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func doneButtonDidPress() {
-    let images: [ImagePickerImage]
-    if let preferredImageSize = preferredImageSize {
-      images = AssetManager.resolveAssets(stack.assets, size: preferredImageSize, resizeMode: resizeModeIfPreferredImageSize)
-    } else {
-      images = AssetManager.resolveAssets(stack.assets)
-    }
-
 		self.configuration.doneButtonHandler?()
-    delegate?.doneButtonDidPress(self, images: images)
+    delegate?.doneButtonDidPress(self, images: stack.assets)
   }
 
   func cancelButtonDidPress() {
@@ -431,14 +422,7 @@ extension ImagePickerController: BottomContainerViewDelegate {
   }
 
   func imageStackViewDidPress() {
-    let images: [ImagePickerImage]
-    if let preferredImageSize = preferredImageSize {
-			images = AssetManager.resolveAssets(stack.assets, size: preferredImageSize, resizeMode: resizeModeIfPreferredImageSize)
-    } else {
-        images = AssetManager.resolveAssets(stack.assets)
-    }
-
-    delegate?.wrapperDidPress(self, images: images)
+    delegate?.selectedStackDidPress(self, images: stack.assets)
   }
 }
 
