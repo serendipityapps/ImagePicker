@@ -9,24 +9,7 @@ open class ImageStack {
     public static let stackDidReload = "stackDidReload"
   }
 
-	let cachingImageManager = PHCachingImageManager()
-	open var assets: [PHAsset] = [] {
-		willSet {
-			cachingImageManager.stopCachingImagesForAllAssets()
-		}
-		didSet {
-			let requestOptions = PHImageRequestOptions()
-			requestOptions.isNetworkAccessAllowed = true
-			requestOptions.deliveryMode = .highQualityFormat
-			requestOptions.version = .current
-			cachingImageManager.startCachingImages(for: self.assets,
-																											targetSize: PHImageManagerMaximumSize,
-																											contentMode: .aspectFit,
-																											options: requestOptions
-			)
-		}
-	}
-
+	open var assets = [PHAsset]()
   fileprivate let imageKey = "image"
 
   open func pushAsset(_ asset: PHAsset) {
